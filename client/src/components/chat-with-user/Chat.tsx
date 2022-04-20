@@ -1,19 +1,19 @@
-import { NextPage } from "next";
 import ChatUserHeader from "./ChatUserHeader";
 import MessagesContainer from "./MessagesContainer";
 import { useSession } from "next-auth/react";
 
-const Chat: NextPage = () => {
+const Chat: React.FC = () => {
   const { data: session } = useSession();
   return (
     <main className="relative w-full bg-gray-100 fullscreen">
       <ChatUserHeader
         user={{
           name: session?.user?.name!,
-          pic: session?.user?.image!,
+          profilePic: session?.user?.image!,
           email: session?.user?.email!,
           lastActive: new Date(),
           online: true,
+          uid: session?.user?.email?.split("@")[0]!,
         }}
       />
       <MessagesContainer />

@@ -1,6 +1,4 @@
-import { NextPage } from "next";
-
-const FooterNav: NextPage = () => {
+const FooterNav: React.FC = () => {
   return (
     <div className="w-full absolute -bottom-1 h-40 bg-gradient-to-t from-white to-transparent flex justify-center items-end">
       <div className="bg-gray-100 shadow-sm w-80 h-14 rounded-full m-4 flex items-center justify-around">

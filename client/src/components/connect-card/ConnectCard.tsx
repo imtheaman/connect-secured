@@ -1,4 +1,3 @@
-import { NextPage } from "next";
 import Logo from "../logo/Logo";
 
 interface Props {
@@ -6,7 +5,7 @@ interface Props {
   children: any;
 }
 
-const ConnectCard: NextPage<Props> = ({ className, children }) => {
+const ConnectCard: React.FC<Props> = ({ className, children }) => {
   return (
     <div className="min-h-[100vh] flex justify-center items-center text-light-black">
       <div

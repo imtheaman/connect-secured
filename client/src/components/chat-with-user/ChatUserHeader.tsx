@@ -1,15 +1,14 @@
-import { NextPage } from "next";
-import Image from "next/image";
 export interface UserProps {
   user: {
     name: string;
-    online: boolean;
-    pic: string;
+    profilePic: string;
     email: string;
-    connectId: string;
+    uid: string;
+    online: boolean;
+    lastActive: Date;
   };
 }
-const ChatUserHeader: NextPage<UserProps> = ({ user }) => (
+const ChatUserHeader: React.FC<UserProps> = ({ user }) => (
   <div className="flex justify-between items-center h-20 p-5">
     <div className="bg-white rounded-full p-1">
       <svg
@@ -38,8 +37,8 @@ const ChatUserHeader: NextPage<UserProps> = ({ user }) => (
       </p>
     </div>
     <div className="relative">
-      <Image
-        src={user.pic}
+      <img
+        src={user.profilePic}
         alt={user.name}
         width={35}
         height={35}

@@ -1,4 +1,4 @@
-import ConnectCard from "../components/connect-card/ConnectCard";
+import ConnectCard from "./connect-card/ConnectCard";
 
 const NotFound = () => {
   return (

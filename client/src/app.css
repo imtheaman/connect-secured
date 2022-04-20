@@ -15,7 +15,7 @@
 }
 
 @layer base {
-  fullscreen {
+  .fullscreen {
     height: 100vh;
   }
   #chat-list {

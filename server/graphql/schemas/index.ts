@@ -11,24 +11,30 @@ type Message {
 }
 type User {
   _id: ID!
+  token: ID!
   about: String!
   activeChats: [String!]
   email: String!
   lastActive: String!
   name: String!
-  online: Boolean!
   profilePic: String!
 }
 type Mutation {
   createUser(user: String!): User!
+  updateUser(token: ID!, update: String!): User!
+  deleteUser(token: ID!)
 }
 type Query {
   getChat(chatId: ID!): Chat!
-  getUser(email: String!): User!
+  getUser(token: String!): User!
+  getProfile(email: String!): User!
 }
 
 type Subscription {
-  
+  newUser: User!
+  updateUser: User!
+  newMessage: Message!
+  isOnline: Boolean!
 }
 `;
 

@@ -1,8 +1,8 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const Logo = () => {
   return (
-    <Link href="/" passHref>
+    <Link to="/">
       <h1 className="flex cursor-pointer items-center justify-center text-light-black select-none">
         <span className="text-light-black border w-10 h-10 mr-1 flex items-center justify-center rounded-md font-bold text-3xl">
           C

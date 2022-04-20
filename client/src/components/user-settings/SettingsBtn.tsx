@@ -1,6 +1,4 @@
-import { NextPage } from "next";
-
-const SettingsBtn: NextPage<{ btnName: string; btnAction: () => {} }> = ({
+const SettingsBtn: React.FC<{ btnName: string; btnAction: () => any }> = ({
   btnName,
   btnAction,
 }) => {
@@ -9,7 +7,7 @@ const SettingsBtn: NextPage<{ btnName: string; btnAction: () => {} }> = ({
       className="flex w-full justify-between items-center"
       onClick={btnAction}
     >
-      <p>{btnName}</p>
+      <p className="text-base">{btnName}</p>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-5 w-5"

@@ -1,13 +1,11 @@
-import Image from "next/image";
-
-const ChatListItem = () => {
+const ChatListItem: React.FC = () => {
   const fullName = "Alyssia Octavia";
   const imageSrc = "/girl1.jpg";
   const lastMessage = "Hii Alyssia! please reply me baby😘";
   return (
     <div className="flex items-start w-full px-2">
       <div>
-        <Image
+        <img
           src={imageSrc}
           alt={fullName}
           width={45}

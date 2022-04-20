@@ -1,5 +1,3 @@
-import { NextPage } from "next";
-
 interface Props {
   message: {
     content: string;
@@ -8,7 +6,7 @@ interface Props {
   };
 }
 
-const Message: NextPage<Props> = ({ message: { content, sentAt, sender } }) => {
+const Message: React.FC<Props> = ({ message: { content, sentAt, sender } }) => {
   const username = "urtheaman";
   const hasRecieved = true;
   const read = true;
@@ -18,7 +16,7 @@ const Message: NextPage<Props> = ({ message: { content, sentAt, sender } }) => {
         sender === username
           ? "bg-[#daffec] rounded-br-none self-end pr-16"
           : "bg-[#ddf5fa] rounded-tl-none pr-12 self-start"
-      } py-2 px-4 relative max-w-[14rem] lg:max-w-[22rem] rounded-2xl`}
+      } py-2 px-4 relative max-w-[14rem] mid-md:max-w-[16rem] mid-lg:max-w-[20rem] md:max-w-[16rem] lg:max-w-[22rem] rounded-2xl`}
     >
       <p>{content}</p>
       <div className="absolute bottom-[0.4rem] right-3 text-[0.65rem]">

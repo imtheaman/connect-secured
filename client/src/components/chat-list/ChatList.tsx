@@ -1,7 +1,6 @@
-import { NextPage } from "next";
 import ChatListItem from "./ChatListItem";
 
-const ChatList: NextPage = () => {
+const ChatList: React.FC = () => {
   return (
     <div
       className="rounded-t-3xl w-full -mt-4 bg-white  drop-shadow-top px-4 pt-4 overflow-y-scroll scroll-smooth pb-20"

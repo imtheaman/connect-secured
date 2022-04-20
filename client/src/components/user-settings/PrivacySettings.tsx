@@ -1,9 +1,5 @@
 const PrivacySettings = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return <div></div>;
+};
 
-export default PrivacySettings
+export default PrivacySettings;

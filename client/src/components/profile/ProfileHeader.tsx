@@ -1,6 +1,4 @@
-import { NextPage } from "next";
-
-const ProfileHeader: NextPage = () => {
+const ProfileHeader: React.FC = () => {
   return (
     <div className="flex justify-between">
       <button className="bg-white p-2 rounded-full">

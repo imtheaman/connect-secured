@@ -1,9 +1,9 @@
-import { NextPage } from "next";
-import Image from "next/image";
-import Stories from "../stories/Stories";
 import { signOut, useSession } from "next-auth/react";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { setHomeContent } from "../../local-states/slices/uiSlice";
+import StoriesContainer from "../stories/StoriesContainer";
 
-const Header: NextPage = () => {
+const Header: React.FC = () => {
   const currentHours = new Date().getHours();
   const greeting =
     currentHours < 12
@@ -16,6 +16,8 @@ const Header: NextPage = () => {
   const { data: session } = useSession();
   const fullName = session?.user?.name || "";
   const imageSrc = session?.user?.image || "/girl1.jpg";
+  const dispatch = useAppDispatch();
+
   return (
     <div className="bg-gradient-br md:drop-shadow-top w-full h-60">
       {/* Greeting */}
@@ -46,21 +48,15 @@ const Header: NextPage = () => {
           </button>
           <button
             className="relative w-9 h-9 rounded-full"
-            onClick={() => signOut()}
+            onClick={() => dispatch(setHomeContent("UserSettings"))}
           >
-            <Image
-              layout="fill"
-              src={imageSrc}
-              className="rounded-full"
-              alt={fullName}
-              priority
-            />
+            <img src={imageSrc} className="rounded-full" alt={fullName} />
           </button>
         </div>
       </div>
 
       {/* Stories */}
-      <Stories />
+      <StoriesContainer />
     </div>
   );
 };

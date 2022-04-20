@@ -1,9 +1,7 @@
-import { NextPage } from "next";
-import Image from "next/image";
 import { UserProps } from "../chat-with-user/ChatUserHeader";
 
-const ProfileContent: NextPage<UserProps> = ({
-  user: { pic, name, online, email, connectId },
+const ProfileContent: React.FC<UserProps> = ({
+  user: { profilePic, name, lastActive, email, uid, online },
 }) => {
   return (
     <div
@@ -11,8 +9,8 @@ const ProfileContent: NextPage<UserProps> = ({
       id="profile"
     >
       <div className="absolute -top-16 left-1/2 -translate-x-1/2">
-        <Image
-          src={pic}
+        <img
+          src={profilePic}
           alt={name}
           width="120px"
           height="120px"
@@ -80,7 +78,7 @@ const ProfileContent: NextPage<UserProps> = ({
           </div>
           <div className="ml-2">
             <p className="text-xs">Connect Id</p>
-            <p className="font-semibold -mt-1">@{connectId}</p>
+            <p className="font-semibold -mt-1">@{uid}</p>
           </div>
         </div>
         {/* Settings */}
