@@ -1,6 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { setHomeContent } from "../../local-states/slices/uiSlice";
+import { setHomeContent, setSearch } from "../../local-states/slices/uiSlice";
 import StoriesContainer from "../stories/StoriesContainer";
 
 const Header: React.FC = () => {
@@ -17,7 +17,6 @@ const Header: React.FC = () => {
   const fullName = session?.user?.name || "";
   const imageSrc = session?.user?.image || "/girl1.jpg";
   const dispatch = useAppDispatch();
-
   return (
     <div className="bg-gradient-br md:drop-shadow-top w-full h-60">
       {/* Greeting */}
@@ -30,18 +29,21 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex space-x-4 items-center">
-          <button className="w-8 h-8 bg-white flex items-center justify-center rounded-full">
+          <button
+            className="bg-white cursor-pointer p-[0.35rem]  rounded-full"
+            onClick={() => dispatch(setSearch(true))}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth="2"
+              stroke-width="1.2"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke-linecap="round"
+                stroke-linejoin="round"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>

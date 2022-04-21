@@ -1,10 +1,19 @@
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { secondaryContent, userUid } from "../../local-states/slices/uiSlice";
 const ChatListItem: React.FC = () => {
   const fullName = "Alyssia Octavia";
   const imageSrc = "/girl1.jpg";
   const lastMessage = "Hii Alyssia! please reply me baby😘";
+  const uid = "urtheaman";
+  const dispatch = useAppDispatch();
   return (
     <div className="flex items-start w-full px-2">
-      <div>
+      <button
+        onClick={() => {
+          dispatch(secondaryContent("Profile"));
+          dispatch(userUid(uid));
+        }}
+      >
         <img
           src={imageSrc}
           alt={fullName}
@@ -12,8 +21,14 @@ const ChatListItem: React.FC = () => {
           height={45}
           className="rounded-full"
         />
-      </div>
-      <div className="ml-3 border-b border-gray-300 pb-4 mb-4 flex-grow">
+      </button>
+      <div
+        className="ml-3 border-b border-gray-300 pb-4 mb-4 flex-grow"
+        onClick={() => {
+          dispatch(secondaryContent("Chat"));
+          dispatch(userUid(uid));
+        }}
+      >
         <div className="flex flex-col w-full mr-1 cursor-pointer">
           <div className="flex justify-between items-center">
             <h4 className="font-semibold text-light-black">Estelle Harwood</h4>

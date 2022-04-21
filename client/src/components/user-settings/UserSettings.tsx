@@ -1,9 +1,10 @@
 import SettingsBtn from "./SettingsBtn";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { setHomeContent } from "../../local-states/slices/uiSlice";
 
 const UserSettings = () => {
+  const naviagte = useNavigate();
   const dispatch = useAppDispatch();
   return (
     <div className="bg-gray-100 fullscreen md:border-r md:border-gray-300 p-4">
@@ -47,10 +48,21 @@ const UserSettings = () => {
           />
         </ul>
         <div className="text-xs absolute bottom-8 left-1/2 text-center -translate-x-1/2 text-gray-400">
-          Connect V.1.2, made with ❤ by{" "}
-          <Link to="https://github.com/urtheaman">
-            <i className="cursor-pointer">urtheaman</i>
-          </Link>
+          <button
+            className="border border-gray-300 mb-6 rounded-lg px-4 py-1"
+            onClick={() => {
+              // log out code
+              naviagte("/signin", { replace: true });
+            }}
+          >
+            Logout
+          </button>
+          <div>
+            Connect V.1.2, made with ❤ by{" "}
+            <Link to="https://github.com/urtheaman">
+              <i className="cursor-pointer">urtheaman</i>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

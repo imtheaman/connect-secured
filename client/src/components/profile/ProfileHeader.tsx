@@ -1,7 +1,14 @@
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { secondaryContent } from "../../local-states/slices/uiSlice";
+
 const ProfileHeader: React.FC = () => {
+  const dispatch = useAppDispatch();
   return (
     <div className="flex justify-between">
-      <button className="bg-white p-2 rounded-full">
+      <button
+        className="bg-white p-2 rounded-full"
+        onClick={() => dispatch(secondaryContent("ProfileEdit"))}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"
@@ -17,7 +24,10 @@ const ProfileHeader: React.FC = () => {
           />
         </svg>
       </button>
-      <button className="bg-white p-2 rounded-full">
+      <button
+        className="bg-white p-2 rounded-full"
+        onClick={() => dispatch(secondaryContent("Chat"))}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"

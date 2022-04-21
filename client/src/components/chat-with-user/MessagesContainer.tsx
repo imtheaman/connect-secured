@@ -11,9 +11,9 @@ const MessagesContainer: React.FC = () => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
   });
   return (
-    <div className="relative md:mx-3 lg:mx-5">
+    <div>
       <div
-        className=" rounded-t-3xl pb-20 p-4 lg:p-6 lg:pb-20 bg-white drop-shadow-top flex flex-col space-y-4 overflow-y-scroll"
+        className="rounded-t-3xl pb-20 p-4 lg:p-6 lg:pb-20 bg-white drop-shadow-top flex flex-col space-y-4 overflow-y-scroll"
         id="chat"
         ref={chatRef}
       >
@@ -32,7 +32,9 @@ const MessagesContainer: React.FC = () => {
           </svg>
           Messages are end to end encrypted.
           <Link to="/about/encryption">
-            <span className="ml-1 font-semibold hover:underline">learn more</span>
+            <span className="ml-1 font-semibold hover:underline">
+              learn more
+            </span>
           </Link>
         </GrayBg>
         <Message

@@ -1,12 +1,13 @@
-import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { useMediaQuery } from "react-responsive";
 import Home from "./components/Home";
 import "./app.css";
-import Profile from "./components/profile";
 import Chat from "./components/chat-with-user/Chat";
 import { Route, Routes } from "react-router-dom";
+import Profile from "./components/profile";
 import Signin from "./components/signin";
+import useTypedSelector from "./hooks/useTypedSelector";
+import StartIntro from "./components/start-intro/StartIntro";
 
 interface AppProps {
   session?: {
@@ -26,7 +27,8 @@ const App: React.FC<AppProps> = ({ session }) => {
   const tablet = useMediaQuery({
     query: "(min-width: 768px)",
   });
-  console.log();
+
+  const { secondaryContent } = useTypedSelector(({ ui }) => ui);
   return (
     <SessionProvider session={session}>
       <Routes>
@@ -36,20 +38,40 @@ const App: React.FC<AppProps> = ({ session }) => {
             desktop ? (
               <div className="flex">
                 <Home />
-                <Chat />
-                <Profile />
+                {secondaryContent ? (
+                  <>
+                    <Chat />
+                    {secondaryContent !== "Chat" && <Profile />}
+                  </>
+                ) : (
+                  <StartIntro />
+                )}
               </div>
             ) : tablet ? (
               <div className="flex">
                 <Home />
-                <Chat />
+                {secondaryContent ? (
+                  secondaryContent === "Chat" ? (
+                    <Chat />
+                  ) : (
+                    <Profile />
+                  )
+                ) : (
+                  <StartIntro />
+                )}
               </div>
             ) : (
-              <Routes>
-                <Route path="/*" element={<Home />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/profile" element={<Profile />} />
-              </Routes>
+              <>
+                {secondaryContent ? (
+                  secondaryContent === "Chat" ? (
+                    <Chat />
+                  ) : (
+                    <Profile />
+                  )
+                ) : (
+                  <Home />
+                )}
+              </>
             )
           }
         />
