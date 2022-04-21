@@ -2,10 +2,11 @@
 
 > end-to-end encryption is used to make sure your messages can't be read by others. Even people at Connect can't access it.
 
-it's device responsive using js, not using media queries, so it'll be responsive according to the device, not according to the viewport width/height.
+it's responsive mostly using js library react-responsive.
 
 tech used in this project -
-* Next.js
+* React.js
+* React-responsive
 * TypeScript
 * Mongodb
 * NextAuth

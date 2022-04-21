@@ -1,5 +1,8 @@
 const typeDefs = /* GraphQL */ `
-  type Chat {
+scalar Date
+scalar JSON
+
+type Chat {
   _id: ID!
   messages: [Message!]
   people: [String!]
@@ -7,7 +10,7 @@ const typeDefs = /* GraphQL */ `
 type Message {
   content: String!
   sender: String!
-  sentAt: String!
+  sentAt: Date!
 }
 type User {
   _id: ID!
@@ -15,14 +18,14 @@ type User {
   about: String!
   activeChats: [String!]
   email: String!
-  lastActive: String!
+  lastActive: Date!
   name: String!
   profilePic: String!
 }
 type Mutation {
-  createUser(user: String!): User!
-  updateUser(token: ID!, update: String!): User!
-  deleteUser(token: ID!)
+  createUser(user: JSON!): User!
+  updateUser(token: ID!, update: JSON!): User!
+  deleteUser(token: ID!) Boolean!
 }
 type Query {
   getChat(chatId: ID!): Chat!

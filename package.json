@@ -1,0 +1,23 @@
+{
+  "name": "connect-chat-app",
+  "version": "1.0.0",
+  "description": "> end-to-end encryption is used to make sure your messages can't be read by others. Even people at Connect can't access it.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd server && npm run dev\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urtheaman/connect-chat-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/urtheaman/connect-chat-app/issues"
+  },
+  "homepage": "https://connect-urtheaman.vercel.app",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
