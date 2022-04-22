@@ -33,6 +33,42 @@
   .nots-toggle.react-toogle--checked .react-toggle-track {
     background-color: #202020;
   }
+  /* <Modal> */
+  #modal-container {
+    background: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  #modal-div {
+    cursor: default;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 3rem;
+    position: relative;
+    width: 80%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+  }
+  #modal-btn {
+    cursor: pointer;
+    width: 100%;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 1.9rem;
+  }
+  /* </Modal> */
   img {
     user-select: none;
   }

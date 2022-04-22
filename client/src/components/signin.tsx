@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from 'react';
 import ConnectCard from "./connect-card/ConnectCard";
 import { useSession, signIn } from "next-auth/react";
 import { useNavigate } from "react-router-dom";
+import Modal from "./modal/Modal";
 
 const Signin: React.FC = () => {
   const [authAction, setAuthAction] = useState<
@@ -9,11 +10,17 @@ const Signin: React.FC = () => {
   >("Sign in");
   const navigate = useNavigate();
   const { status } = useSession();
+  const [modal, setModal] = useState<ReactNode | false>(false);
   useEffect(() => {
     if (status === "authenticated") navigate("/", { replace: true });
   }, [status, navigate]);
   return (
     <ConnectCard className="grid grid-cols-1 md:grid-cols-2">
+      {modal && (
+        <Modal className="text-center" showModal={setModal}>
+          {modal}
+        </Modal>
+      )}
       <div className="flex flex-col space-y-6 border-b pb-8 md:pb-0 md:border-b-0 md:border-r border-gray-300 md:pr-16">
         <div className="flex items-center justify-between mb-3">
           <button
@@ -81,7 +88,14 @@ const Signin: React.FC = () => {
       <div className="pt-8 md:pl-16 md:pt-0 space-y-6 flex flex-col">
         <h1 className="text-2xl font-semibold mb-3">Social signin</h1>
 
-        <button className="auth-btn">
+        <button
+          className="auth-btn"
+          onClick={() =>
+            setModal(
+              "Apple didn't provide me developer license. so this feature isn't working right now."
+            )
+          }
+        >
           <svg
             version="1.1"
             id="Livello_1"
@@ -107,7 +121,14 @@ const Signin: React.FC = () => {
           </svg>
           <p className="ml-2">Apple Sign in</p>
         </button>
-        <button className="auth-btn" onClick={() => signIn("github")}>
+        <button
+          className="auth-btn"
+          onClick={() =>
+            setModal(
+              "Only manual signin/signup with email and password is working right now."
+            )
+          }
+        >
           <img
             src="/github.png"
             alt="sign in with github"
@@ -116,7 +137,14 @@ const Signin: React.FC = () => {
           />
           <p className="ml-2">Github Sign in</p>
         </button>
-        <button className="auth-btn" onClick={() => signIn("linkedin")}>
+        <button
+          className="auth-btn"
+          onClick={() =>
+            setModal(
+              "Only manual signin/signup with email and password is working right now."
+            )
+          }
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
