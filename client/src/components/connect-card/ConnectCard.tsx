@@ -7,7 +7,7 @@ interface Props {
 
 const ConnectCard: React.FC<Props> = ({ className, children }) => {
   return (
-    <div className="min-h-[100vh] flex justify-center items-center text-light-black">
+    <div className="min-h-[100vh] bg-lightwhite flex justify-center items-center text-light-black">
       <div
         className={`relative p-4 pt-32 md:p-14 md:pt-24 lg:p-20 lg:pt-28 w-full max-w-[55rem] z-10 bg-white shadow-all h-[100vh] md:h-auto md:min-h-[60vh] ${className}`}
       >

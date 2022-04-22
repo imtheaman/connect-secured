@@ -19,7 +19,7 @@ const CreateNewChatButton = () => {
             d="M12 4v16m8-8H4"
           />
         </svg>
-        <p className="text-sm">Create New</p>
+        <p className="text-sm">New Chat</p>
       </button>
     </div>
   );

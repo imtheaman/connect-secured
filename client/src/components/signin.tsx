@@ -1,19 +1,89 @@
-import { useEffect, useState, ReactNode } from 'react';
+import { useState, ReactNode, useReducer } from "react";
 import ConnectCard from "./connect-card/ConnectCard";
-import { useSession, signIn } from "next-auth/react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./modal/Modal";
+import { SHA512 } from "crypto-js";
+
+const hash = (input: string) => SHA512(input).toString();
 
 const Signin: React.FC = () => {
   const [authAction, setAuthAction] = useState<
     "Sign in" | "Sign up" | "Send OTP" | "Reset"
   >("Sign in");
   const navigate = useNavigate();
-  const { status } = useSession();
   const [modal, setModal] = useState<ReactNode | false>(false);
-  useEffect(() => {
-    if (status === "authenticated") navigate("/", { replace: true });
-  }, [status, navigate]);
+
+  const submitHandler = (e: any) => {
+    e.preventDefault();
+
+    if (authAction === "Sign in" && state.email && state.password) {
+      const password = hash(state.password);
+      const loginDetails = { email: state.email, password };
+      console.log(loginDetails)
+      dispatch({ type: "EMAIL", payload: "" });
+      dispatch({ type: "PASSWORD", payload: "" });
+    } else if (
+      authAction === "Sign up" &&
+      state.email &&
+      state.password &&
+      state.repeat_password
+    ) {
+      if (state.password === state.repeat_password) {
+        const password = hash(state.password);
+        const loginDetails = { name: state.name, email: state.email, password };
+        console.log(loginDetails)
+        dispatch({ type: "NAME", payload: "" });
+        dispatch({ type: "EMAIL", payload: "" });
+        dispatch({ type: "PASSWORD", payload: "" });
+        dispatch({ type: "REPEAT_PASSWORD", payload: "" });
+      } else
+        setModal(
+          <h3 className="text-lg font-semibold">Passwords don't match</h3>
+        );
+    } else if (authAction === "Send OTP" && state.email) {
+      dispatch({ type: "EMAIL", payload: "" });
+    } else if (authAction === "Reset" && state.email) {
+      dispatch({ type: "EMAIL", payload: "" });
+    } else
+      setModal(
+        <h3 className="text-lg font-semibold">
+          Please fill all the required details
+        </h3>
+      );
+  };
+  type State = {
+    name: string;
+    email: string;
+    password: string;
+    repeat_password: string;
+  };
+  const reducer = (
+    state: State,
+    action: {
+      type: "NAME" | "EMAIL" | "PASSWORD" | "REPEAT_PASSWORD";
+      payload: string;
+    }
+  ) => {
+    switch (action.type) {
+      case "NAME":
+        return { ...state, name: action.payload };
+      case "EMAIL":
+        return { ...state, email: action.payload };
+      case "PASSWORD":
+        return { ...state, password: action.payload };
+      case "REPEAT_PASSWORD":
+        return { ...state, repeat_password: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, {
+    name: "",
+    email: "",
+    password: "",
+    repeat_password: "",
+  });
   return (
     <ConnectCard className="grid grid-cols-1 md:grid-cols-2">
       {modal && (
@@ -23,51 +93,76 @@ const Signin: React.FC = () => {
       )}
       <div className="flex flex-col space-y-6 border-b pb-8 md:pb-0 md:border-b-0 md:border-r border-gray-300 md:pr-16">
         <div className="flex items-center justify-between mb-3">
-          <button
+          <div
             className={
               authAction === "Sign up"
-                ? "text-lg font-thin"
-                : "text-2xl font-semibold"
+                ? "text-lg font-thin cursor-pointer"
+                : "text-2xl font-semibold cursor-pointer"
             }
             onClick={() => setAuthAction("Sign in")}
           >
             Email signin
-          </button>
+          </div>
           <div className="border-r w-1 h-8 border-gray-300"></div>
-          <button
+          <div
             className={
               authAction === "Sign up"
-                ? "text-2xl font-semibold"
-                : "text-lg font-thin"
+                ? "text-2xl font-semibold cursor-pointer"
+                : "text-lg font-thin cursor-pointer"
             }
             onClick={() => setAuthAction("Sign up")}
           >
             Create account
-          </button>
+          </div>
         </div>
-        <input
-          type="email"
-          className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
-          placeholder="Email"
-        />
-        {(authAction === "Sign in" || authAction === "Sign up") && (
+        <form className="flex flex-col space-y-6">
+          {authAction === "Sign up" && (
+            <input
+              type="text"
+              value={state.name}
+              onChange={(e) =>
+                dispatch({ type: "NAME", payload: e.target.value })
+              }
+              className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
+              placeholder="Full name"
+            />
+          )}
           <input
-            type="password"
+            type="email"
+            value={state.email}
+            onChange={(e) =>
+              dispatch({ type: "EMAIL", payload: e.target.value })
+            }
             className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
-            placeholder="Password"
+            placeholder="Email"
           />
-        )}
-        {authAction === "Sign up" && (
-          <input
-            type="password"
-            className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
-            placeholder="Confirm Password"
-          />
-        )}
+          {(authAction === "Sign in" || authAction === "Sign up") && (
+            <input
+              type="password"
+              value={state.password}
+              onChange={(e) =>
+                dispatch({ type: "PASSWORD", payload: e.target.value })
+              }
+              className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
+              placeholder="Password"
+            />
+          )}
+          {authAction === "Sign up" && (
+            <input
+              type="password"
+              value={state.repeat_password}
+              onChange={(e) =>
+                dispatch({ type: "REPEAT_PASSWORD", payload: e.target.value })
+              }
+              className="bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none"
+              placeholder="Confirm Password"
+            />
+          )}
 
-        <button type="submit" className="auth-btn">
-          {authAction}
-        </button>
+          <button type="submit" className="auth-btn" onClick={submitHandler}>
+            {authAction}
+          </button>
+        </form>
         <div className="flex justify-between font-thin text-sm">
           <button
             className="hover:underline"

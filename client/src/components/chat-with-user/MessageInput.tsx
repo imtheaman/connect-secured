@@ -1,7 +1,7 @@
 const MessageInput = () => {
   return (
     <div className="absolute p-4 lg:p-6 bg-gradient-to-t from-[rgba(255,255,255,0.9)] to-[rgba(255,255,255,0.1)] flex justify-between items-center bottom-0 left-0 w-full h-20">
-      <div className="flex items-center drop-shadow-md justify-between flex-grow bg-gray-50 rounded-full px-2">
+      <div className="flex items-center drop-shadow-md justify-between flex-grow bg-gray-200 rounded-full px-2">
         <button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@ const MessageInput = () => {
           placeholder="Type a message"
         />
       </div>
-      <div className="bg-gray-50 p-[0.6rem] drop-shadow-md ml-2 rounded-full">
+      <div className="bg-gray-200 p-[0.6rem] drop-shadow-md ml-2 rounded-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"

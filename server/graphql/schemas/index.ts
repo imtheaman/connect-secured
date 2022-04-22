@@ -5,13 +5,12 @@ scalar JSON
 type Chat {
   _id: ID!
   messages: ID!
-  lastMessage: Message
-  lastOpened: [LastOpened!]!
-  people: [String!]
+  lastMessage: Message!
+  people: [People!]
 }
-type LastOpened {
+type People {
   uid: ID!,
-  lastOpened: Date
+  lastOpened: String!
 }
 type Messages {
   _id: ID!
@@ -20,7 +19,7 @@ type Messages {
 type Message {
   content: String!
   sender: String!
-  sentAt: Date!
+  sentAt: String!
 }
 type User {
   _id: ID!
@@ -32,22 +31,28 @@ type User {
   profilePic: String!
 }
 type Mutation {
+  # user
   createUser(user: JSON!): Boolean!
   updateUser(userId: ID!, update: JSON!): Boolean!
   deleteUser(userId: ID!): Boolean!
-  deleteChat(chatId: ID!): Boolean!
   setLastActive(userId: ID!, lastActive: Date!)
+  isOnline(userId: String!)
+  #chat
+  createChat()
+  deleteChat(chatId: ID!): Boolean!
   newMessage(chatId: ID!, message: JSON!): Boolean!
 }
 type Query {
+  #chat
   getChat(chatId: ID!): Chat!
-  getUser(userId: ID!): User!
+  getMessages(messagesId: ID!, from: Int!): Messages!
+  #user
+  getUser(email: String!, password: String!): User!
+  getUsers(filter: String, skip: Int!): [User]
   getProfile(userId: ID!): User!
-  getMessages(chatId: ID!): Messages!
 }
 
 type Subscription {
-  newUser: User!
   newMessage: Message!
   isOnline: Boolean!
 }

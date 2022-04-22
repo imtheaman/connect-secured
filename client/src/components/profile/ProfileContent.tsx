@@ -5,7 +5,7 @@ const ProfileContent: React.FC<UserProps> = ({
 }) => {
   return (
     <div
-      className="relative flex flex-col bg-white rounded-t-3xl pt-16 mt-8"
+      className="relative flex flex-col bg-lightwhite rounded-t-3xl pt-16 mt-8"
       id="profile"
     >
       <div className="absolute -top-16 left-1/2 -translate-x-1/2">

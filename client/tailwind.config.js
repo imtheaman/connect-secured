@@ -14,6 +14,7 @@ module.exports = {
       colors: {
         "light-black": "#202020",
         "black-transparent": "rgba(0,0,0,0.75)",
+        lightwhite: "#ffffffd7",
       },
       screens: {
         "mid-md": "450px",

@@ -17,6 +17,7 @@ client.connect((err) => console.log("db is connected"));
 const db = client.db("connect");
 const users = db.collection("users");
 const chats = db.collection("chats");
+const messages = db.collection("messages")
 
 const server = createServer({
   schema: {
@@ -26,6 +27,7 @@ const server = createServer({
   context: {
     chats,
     users,
+    messages
   },
 });
 server.start();

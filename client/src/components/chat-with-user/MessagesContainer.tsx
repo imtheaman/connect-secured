@@ -13,7 +13,7 @@ const MessagesContainer: React.FC = () => {
   return (
     <div>
       <div
-        className="rounded-t-3xl pb-20 p-4 lg:p-6 lg:pb-20 bg-white drop-shadow-top flex flex-col space-y-4 overflow-y-scroll"
+        className="rounded-t-3xl pb-20 p-4 lg:p-6 lg:pb-20 bg-lightwhite drop-shadow-top flex flex-col space-y-4 overflow-y-scroll"
         id="chat"
         ref={chatRef}
       >

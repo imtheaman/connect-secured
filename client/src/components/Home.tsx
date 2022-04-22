@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import Header from "./header/Header";
 import ChatList from "./chat-list/ChatList";
 import CreateNewChatButton from "./footer/CreateNewChatButton";
@@ -14,10 +13,9 @@ import NewChat from "./new-chat/NewChat";
 import SearchInput from "./header/SearchInput";
 
 const Home: React.FC = () => {
-  const { data: session, status } = useSession();
   const navigate = useNavigate();
   const { loading, error, data } = useQuery(GET_USER, {
-    variables: { email: session?.user?.email },
+    variables: { email: "email" },
   });
   const { homeContent: home, search } = useTypedSelector(({ ui }) => ui);
   // useEffect(() => {
