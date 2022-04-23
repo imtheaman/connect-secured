@@ -8,7 +8,8 @@ tech used in this project -
 * React.js
 * React-responsive
 * TypeScript
+* Tailwindcss
 * Mongodb
-* NextAuth
+* Secure-auth
 * GraphQL
 * Apollo Client
