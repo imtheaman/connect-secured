@@ -1,5 +1,6 @@
 import { secondaryContent } from "../../local-states/slices/uiSlice";
 import useAppDispatch from "../../hooks/useAppDispatch";
+import GoBackBtn from "./GoBackBtn";
 
 export interface UserProps {
   user: {
@@ -15,27 +16,11 @@ const ChatUserHeader: React.FC<UserProps> = ({ user }) => {
   const dispatch = useAppDispatch();
   return (
     <div className="flex justify-between items-center h-20 py-5">
-      <button
-        className="bg-white rounded-full p-1"
+      <GoBackBtn
         onClick={() => {
           dispatch(secondaryContent(false));
         }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
+      />
       <div className="text-center">
         <h1 className="font-semibold">{user.name}</h1>
         <p
@@ -53,8 +38,8 @@ const ChatUserHeader: React.FC<UserProps> = ({ user }) => {
         <img
           src={user.profilePic}
           alt={user.name}
-          width={35}
-          height={35}
+          width={36}
+          height={36}
           className="rounded-full"
         />
         {user.online ? (

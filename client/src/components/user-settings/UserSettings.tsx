@@ -49,7 +49,7 @@ const UserSettings = () => {
         </ul>
         <div className="text-xs absolute bottom-8 left-1/2 text-center -translate-x-1/2 text-gray-400">
           <button
-            className="border border-gray-300 mb-6 rounded-lg px-4 py-1"
+            className="border border-gray-300 mb-6 rounded-lg px-5 text-sm py-2"
             onClick={() => {
               // log out code
               naviagte("/signin", { replace: true });

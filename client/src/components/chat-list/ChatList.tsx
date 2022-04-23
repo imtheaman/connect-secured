@@ -9,20 +9,202 @@ const ChatList: React.FC = () => {
       <h2 className="font-bold text-2xl text-light-black px-2 pt-4 mb-8">
         Chats
       </h2>
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
+      <ChatListItem
+        chat={{
+          uid: "urtheaman", //it should be derived in chatListItem / we can send it as a prop / using redux
+          chatId: "sji48599sd85",
+          name: "Alyssia Ford",
+          lastMessage: {
+            sender: "alyssia",
+            content: "Hey There! i'm alyssia. how're you doing?",
+            sentAt: new Date().getTime(),
+          },
+          profilePic: "/girl1.jpg",
+          unreadCount: 1,
+        }}
+      />
     </div>
   );
 };

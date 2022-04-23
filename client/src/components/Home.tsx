@@ -10,7 +10,7 @@ import ThemesSettings from "./user-settings/ThemesSettings";
 import ChatSettings from "./user-settings/ChatSettings";
 import PrivacySettings from "./user-settings/PrivacySettings";
 import NewChat from "./new-chat/NewChat";
-import SearchInput from "./header/SearchInput";
+import Search from "./header/Search";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Home: React.FC = () => {
   // });
   return (
     <main className="relative w-full fullscreen md:max-w-[22rem]">
-      {search && <SearchInput />}
+      {search && <Search />}
       {home === "PrivacySettings" ? (
         <PrivacySettings />
       ) : home === "UserSettings" ? (
