@@ -7,7 +7,7 @@ const NewChat: React.FC = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="border border-r-0 fullscreen overflow-y-scroll">
+    <div className="border bg-lightwhite border-r-0 fullscreen overflow-y-scroll">
       <div className="sticky top-0 bg-white  px-5 pt-5">
         <div className="flex justify-between items-center mb-4">
           <GoBackBtn
