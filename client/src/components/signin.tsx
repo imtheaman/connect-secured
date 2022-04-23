@@ -2,9 +2,6 @@ import { useState, ReactNode, useReducer } from "react";
 import ConnectCard from "./connect-card/ConnectCard";
 import { useNavigate } from "react-router-dom";
 import Modal from "./modal/Modal";
-import { SHA512 } from "crypto-js";
-
-const hash = (input: string) => SHA512(input).toString();
 
 const Signin: React.FC = () => {
   const [authAction, setAuthAction] = useState<
@@ -13,13 +10,12 @@ const Signin: React.FC = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState<ReactNode | false>(false);
 
-  const submitHandler = (e: any) => {
+  const submitHandler = async (e: any) => {
     e.preventDefault();
 
     if (authAction === "Sign in" && state.email && state.password) {
-      const password = hash(state.password);
-      const loginDetails = { email: state.email, password };
-      console.log(loginDetails)
+      const loginDetails = { email: state.email, password: state.password };
+      console.log(loginDetails);
       dispatch({ type: "EMAIL", payload: "" });
       dispatch({ type: "PASSWORD", payload: "" });
     } else if (
@@ -29,9 +25,19 @@ const Signin: React.FC = () => {
       state.repeat_password
     ) {
       if (state.password === state.repeat_password) {
-        const password = hash(state.password);
-        const loginDetails = { name: state.name, email: state.email, password };
-        console.log(loginDetails)
+        const ip_details = await fetch(
+          "https://api.db-ip.com/v2/free/self"
+        ).then((res) => res.json());
+        const country = await ip_details.countryName;
+        const state = await ip_details.stateProv;
+        const loginDetails = {
+          name: state.name,
+          email: state.email,
+          password: state.password,
+          country: await country,
+          state: await state,
+        };
+        console.log(loginDetails);
         dispatch({ type: "NAME", payload: "" });
         dispatch({ type: "EMAIL", payload: "" });
         dispatch({ type: "PASSWORD", payload: "" });

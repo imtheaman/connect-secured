@@ -1,20 +1,26 @@
 export interface Chat {
   _id: string;
-  messages: Message[];
-  people: [string];
+  messages: string;
+  lastMessage: Message;
+  people: People[];
+}
+export interface People {
+  uid: string;
+  lastOpened: number;
 }
 export interface Message {
   content: string;
   sender: string;
-  sentAt: string;
+  sentAt: number;
 }
 export interface User {
   _id: string;
   about: string;
   activeChats: [string];
   email: string;
-  lastActive: string;
+  lastActive: number;
   name: string;
-  online: boolean;
+  state: string;
+  country: string;
   profilePic: string;
 }

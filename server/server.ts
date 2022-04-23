@@ -1,23 +1,17 @@
 import { createServer } from "@graphql-yoga/node";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient } from "mongodb";
 import typeDefs from "./graphql/schemas";
 import resolvers from "./graphql/resolvers";
-// const process = require("dotenv").config();
+const process = require("dotenv").config();
 
-const uri =
-  "mongodb+srv://urtheaman:9192631770@cluster0.uzgiq.mongodb.net/connect?retryWrites=true&w=majority&ssl=true";
-const client = new MongoClient(uri, {
-  // @ts-ignore
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
 client.connect((err) => console.log("db is connected"));
 const db = client.db("connect");
 const users = db.collection("users");
 const chats = db.collection("chats");
-const messages = db.collection("messages")
+const messages = db.collection("messages");
 
 const server = createServer({
   schema: {
@@ -27,7 +21,7 @@ const server = createServer({
   context: {
     chats,
     users,
-    messages
+    messages,
   },
 });
 server.start();

@@ -1,5 +1,4 @@
 const typeDefs = /* GraphQL */ `
-scalar Date
 scalar JSON
 
 type Chat {
@@ -10,7 +9,7 @@ type Chat {
 }
 type People {
   uid: ID!,
-  lastOpened: String!
+  lastOpened: Float
 }
 type Messages {
   _id: ID!
@@ -19,26 +18,29 @@ type Messages {
 type Message {
   content: String!
   sender: String!
-  sentAt: String!
+  sentAt: Float!
 }
 type User {
   _id: ID!
   about: String!
+  state: String!
+  country: String!
   activeChats: [String!]
   email: String!
-  lastActive: Date!
+  lastActive: Float!
   name: String!
-  profilePic: String!
+  profilePic: String
 }
 type Mutation {
   # user
-  createUser(user: JSON!): Boolean!
+  createUser(name: String!, email: String!, password: String!, state: String!, country: String!): Boolean!
   updateUser(userId: ID!, update: JSON!): Boolean!
   deleteUser(userId: ID!): Boolean!
-  setLastActive(userId: ID!, lastActive: Date!)
-  isOnline(userId: String!)
+  setLastActive(userId: ID!, lastActive: Float!): Boolean!
+  isOnline(userId: String!): Boolean
+  isTyping(userId: String!, typing: Boolean!): Boolean
   #chat
-  createChat()
+  createChat(people: [JSON!], message: [JSON!]): [String!]
   deleteChat(chatId: ID!): Boolean!
   newMessage(chatId: ID!, message: JSON!): Boolean!
 }
@@ -48,13 +50,15 @@ type Query {
   getMessages(messagesId: ID!, from: Int!): Messages!
   #user
   getUser(email: String!, password: String!): User!
-  getUsers(filter: String, skip: Int!): [User]
+  getProfiles(filter: String, skip: Int!): [User]
   getProfile(userId: ID!): User!
 }
 
 type Subscription {
-  newMessage: Message!
+  isTyping: Boolean!
   isOnline: Boolean!
+  newMessage: Message!
+  newChat: Chat!
 }
 `;
 

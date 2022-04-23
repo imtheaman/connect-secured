@@ -1,28 +1,36 @@
 import { createPubSub } from "@graphql-yoga/node";
-import { Message, User } from "../types";
-import { dateScalar } from "../scalars";
+import { Message, People, User } from "../types";
 import GraphQLJSON from "graphql-type-json";
+import { SHA512 } from "crypto-js";
+import { Chat } from "../types/index";
+
+const hash = (input: string) => SHA512(input).toString();
 
 const pubsub = createPubSub<{
   isOnline: [userId: string, payload: boolean];
+  isTyping: [userId: string, payload: boolean];
   newMessage: [chatId: string, payload: Message];
+  newChat: [userId: string, payload: Chat];
 }>();
 
 // in large projects there will be abstractions in resolvers,
 // it's a smaller project, that's why it's alright to keep all the resolvers in a single file
 const resolvers = {
-  Date: dateScalar,
   JSON: GraphQLJSON,
   Query: {
     getChat: async (_: any, { chatId }: { chatId: string }, { chats }: any) => {
       return await chats.findOne({ _id: chatId });
     },
     getUser: async (
-      _,
+      _: any,
       { email, password }: { email: string; password: string },
-      { users }
+      { users }: any
     ) => {
-      return await users.findOne({ email, password }, { password: 0 });
+      const hashedPassword = hash(password);
+      return await users.findOne(
+        { email, password: hashedPassword },
+        { password: 0 }
+      );
     },
     getProfile: async (
       _: any,
@@ -45,14 +53,49 @@ const resolvers = {
         { messages: { $slice: [from, 15] }, _id: 0 }
       );
     },
-    getUsers: async (_:any, {filter, skip}: {filter?: string, skip: number}, {users}: any) => {
-      const query = filter ? filter: {};
-      return await users.findMany(query).skip(skip).limit(10)
-    }
+    getProfiles: async (
+      _: any,
+      { filter, skip }: { filter?: string; skip: number },
+      { users }: any
+    ) => {
+      const query = filter ? filter : {};
+      return await users
+        .findMany(query, { password: 0, activeChats: 0 })
+        .skip(skip)
+        .limit(10);
+    },
   },
   Mutation: {
-    createUser: async (_: any, { user }: { user: User }, { users }: any) => {
-      const insertedId = await users.insertOne(user);
+    createUser: async (
+      _: any,
+      {
+        name,
+        email,
+        password,
+        state,
+        country,
+      }: {
+        name: string;
+        email: string;
+        password: string;
+        state: string;
+        country: string;
+      },
+      { users }: any
+    ) => {
+      const hashedPassword = hash(password);
+      const id = email.split("@")[0] + Math.random().toString().slice(2, 7);
+      const insertedId = await users.insertOne({
+        _id: id,
+        name,
+        email,
+        about: "Hey there! I'm using open sourced connect.🙌",
+        lastActive: new Date(),
+        state,
+        country,
+        password: hashedPassword,
+      });
+      pubsub.publish("isOnline", id, true);
       return (await insertedId) ? true : false;
     },
     updateUser: async (
@@ -74,10 +117,27 @@ const resolvers = {
     },
     createChat: async (
       _: any,
-      { people }: { people: string[]; message: string },
-      { chats, messages }
+      { people, message }: { people: People[]; message: Message },
+      { users, chats, messages }: any
     ) => {
-      chats.insertOne({});
+      const messagesId = await messages.insertOne({ messages: [message] });
+      const newChat = {
+        messages: await messagesId,
+        lastMessage: message,
+        people,
+      };
+      const chatId = await chats.insertOne();
+      people.forEach(async (uid) => {
+        await users.updateOne(
+          { _id: uid },
+          { $push: { activeChats: await chatId } }
+        );
+      });
+      pubsub.publish("newChat", people[1].uid, {
+        _id: await chatId,
+        ...newChat,
+      });
+      return [await messagesId, await chatId];
     },
     deleteChat: async (
       _: any,
@@ -98,27 +158,42 @@ const resolvers = {
           $set: { lastMessage: message },
         }
       );
-      messages;
-      //*Todo newMessage, createChat, getMessages, getChat
-      //*Todo hashing password on the server and matching when getUser called
-      //*Todo instead of getUsers name it getProfiles
-      //*Todo adding new created chat to activeChats and adding new message to it's chat's lastMessage and Messages 
+      const { messages: messageId } = await chats.findOne(
+        { _id: chatId },
+        { messages: 1, _id: 0, lastMessage: 0, people: 0 }
+      );
+      const updatedMessages = await messages.updateOne(
+        { _id: await messageId },
+        { $push: { messages: message } }
+      );
 
-      if ((await updatedChat.modifiedContent) === 1) {
+      if ((await updatedMessages.modifiedContent) === 1) {
         pubsub.publish("newMessage", chatId, message);
         return true;
       } else return false;
     },
     isOnline: (_: any, { userId }: { userId: string }) => {
       pubsub.publish("isOnline", userId, true);
+      return true;
     },
-    setLastActive: (
+    setLastActive: async (
       _: any,
       { userId, lastActive }: { userId: string; lastActive: Date },
       { users }: any
     ) => {
       pubsub.publish("isOnline", userId, false);
-      users.updateOne({ _id: userId }, { $set: { lastActive } });
+      const updated = await users.updateOne(
+        { _id: userId },
+        { $set: { lastActive } }
+      );
+      return (await updated.modifiedCount) === 1 ? true : false;
+    },
+    isTyping: (
+      _: any,
+      { userId, typing }: { userId: string; typing: boolean }
+    ) => {
+      pubsub.publish("isTyping", userId, typing);
+      return true;
     },
   },
   Subscription: {
@@ -130,6 +205,16 @@ const resolvers = {
     isOnline: {
       subscribe: (_: any, { userId }: { userId: string }) =>
         pubsub.subscribe("isOnline", userId),
+      resolve: (payload: boolean) => payload,
+    },
+    newChat: {
+      subscribe: (_: any, { userId }: { userId: string }) =>
+        pubsub.subscribe("newChat", userId),
+      resolve: (payload: Chat) => payload,
+    },
+    isTyping: {
+      subscribe: (_: any, { userId }: { userId: string }) =>
+        pubsub.subscribe("isTyping", userId),
       resolve: (payload: boolean) => payload,
     },
   },
