@@ -2,8 +2,8 @@ import { createServer } from "@graphql-yoga/node";
 import { MongoClient } from "mongodb";
 import typeDefs from "./graphql/schemas";
 import resolvers from "./graphql/resolvers";
-import x from 'dotenv';
-const process = x.config()
+import x from "dotenv";
+const process = x.config();
 
 const uri = process?.parsed?.MONGODB_URI!;
 const client = new MongoClient(uri);

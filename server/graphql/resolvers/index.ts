@@ -1,4 +1,4 @@
-import { createPubSub } from "@graphql-yoga/node";
+import { createPubSub, GraphQLYogaError } from "@graphql-yoga/node";
 import { Message, People, User } from "../types";
 import GraphQLJSON from "graphql-type-json";
 import { SHA512 } from "crypto-js";
@@ -83,20 +83,24 @@ const resolvers = {
       },
       { users }: any
     ) => {
-      const hashedPassword = hash(password);
-      const id = email.split("@")[0] + Math.random().toString().slice(2, 7);
-      const insertedId = await users.insertOne({
-        _id: id,
-        name,
-        email,
-        about: "Hey there! I'm using open sourced connect.🙌",
-        lastActive: new Date(),
-        state,
-        country,
-        password: hashedPassword,
-      });
-      pubsub.publish("isOnline", id, true);
-      return (await insertedId) ? true : false;
+      const userExists = await users.findOne({ email });
+      if (await userExists) new GraphQLYogaError("User already exists");
+      else {
+        const hashedPassword = hash(password);
+        const lastActive = new Date().getTime();
+        const id = email.split("@")[0] + Math.random().toString().slice(2, 7);
+        const insertedId = await users.insertOne({
+          _id: id,
+          name,
+          email,
+          about: "Hey there! I'm using open sourced connect.🙌",
+          lastActive,
+          state,
+          country,
+          password: hashedPassword,
+        });
+        return await insertedId;
+      }
     },
     updateUser: async (
       _: any,
@@ -144,7 +148,7 @@ const resolvers = {
         _id: await chatId,
         ...newChat,
       });
-      return [await messagesId, await chatId];
+      return { messagesId: await messagesId, chatId: await chatId };
     },
     deleteChat: async (
       _: any,

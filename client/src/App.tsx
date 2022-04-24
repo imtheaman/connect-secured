@@ -30,54 +30,52 @@ const App: React.FC<AppProps> = ({ session }) => {
 
   const { secondaryContent } = useTypedSelector(({ ui }) => ui);
   return (
-    <SessionProvider session={session}>
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            desktop ? (
-              <div className="flex">
+    <Routes>
+      <Route
+        path="/*"
+        element={
+          desktop ? (
+            <div className="flex">
+              <Home />
+              {secondaryContent ? (
+                <>
+                  <Chat />
+                  {secondaryContent !== "Chat" && <Profile />}
+                </>
+              ) : (
+                <StartIntro />
+              )}
+            </div>
+          ) : tablet ? (
+            <div className="flex">
+              <Home />
+              {secondaryContent ? (
+                secondaryContent === "Chat" ? (
+                  <Chat />
+                ) : (
+                  <Profile />
+                )
+              ) : (
+                <StartIntro />
+              )}
+            </div>
+          ) : (
+            <>
+              {secondaryContent ? (
+                secondaryContent === "Chat" ? (
+                  <Chat />
+                ) : (
+                  <Profile />
+                )
+              ) : (
                 <Home />
-                {secondaryContent ? (
-                  <>
-                    <Chat />
-                    {secondaryContent !== "Chat" && <Profile />}
-                  </>
-                ) : (
-                  <StartIntro />
-                )}
-              </div>
-            ) : tablet ? (
-              <div className="flex">
-                <Home />
-                {secondaryContent ? (
-                  secondaryContent === "Chat" ? (
-                    <Chat />
-                  ) : (
-                    <Profile />
-                  )
-                ) : (
-                  <StartIntro />
-                )}
-              </div>
-            ) : (
-              <>
-                {secondaryContent ? (
-                  secondaryContent === "Chat" ? (
-                    <Chat />
-                  ) : (
-                    <Profile />
-                  )
-                ) : (
-                  <Home />
-                )}
-              </>
-            )
-          }
-        />
-        <Route path="/signin" element={<Signin />} />
-      </Routes>
-    </SessionProvider>
+              )}
+            </>
+          )
+        }
+      />
+      <Route path="/signin" element={<Signin />} />
+    </Routes>
   );
 };
 

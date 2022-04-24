@@ -9,7 +9,7 @@ export interface UserSession {
       image: string;
     };
   };
-  status: "unauthenticated" | "authenticated" | "loading";
+  status: "authenticated" | "loading";
 }
 
 const userSlice = createSlice({

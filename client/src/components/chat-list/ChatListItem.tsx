@@ -32,7 +32,7 @@ const ChatListItem: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   return (
     <div className="flex  w-full px-2">
-      <div
+      <div className="cursor-pointer"
         onClick={() => {
           dispatch(secondaryContent("Profile"));
           dispatch(userUid(uid));

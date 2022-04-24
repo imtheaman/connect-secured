@@ -1,10 +1,8 @@
 import ChatUserHeader from "./ChatUserHeader";
 import MessagesContainer from "./MessagesContainer";
-import { useSession } from "next-auth/react";
 import useTypedSelector from "../../hooks/useTypedSelector";
 
 const Chat: React.FC = () => {
-  const { data: session } = useSession();
   const secondaryContent = useTypedSelector(({ ui }) => ui.secondaryContent);
   return (
     <main className="w-full bg-gray-100 fullscreen">
@@ -17,12 +15,12 @@ const Chat: React.FC = () => {
       >
         <ChatUserHeader
           user={{
-            name: session?.user?.name! || "The Aman",
-            profilePic: session?.user?.image! || "./girl1.jpg",
-            email: session?.user?.email!,
+            name: "The Aman",
+            profilePic: "./girl1.jpg",
+            email: "email@gmail.com",
             lastActive: new Date(),
             online: true,
-            uid: session?.user?.email?.split("@")[0]! || "urtheaman",
+            uid: "urtheaman",
           }}
         />
         <MessagesContainer />

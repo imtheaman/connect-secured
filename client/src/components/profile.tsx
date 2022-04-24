@@ -1,18 +1,16 @@
 import ProfileContent from "./profile/ProfileContent";
 import ProfileHeader from "./profile/ProfileHeader";
-import { useSession } from "next-auth/react";
 import useTypedSelector from "../hooks/useTypedSelector";
 import ProfileEdit from "./profile/ProfileEdit";
 
 const Profile: React.FC = () => {
-  const { data: session } = useSession();
   const user = {
-    name: session?.user?.name || "",
-    email: session?.user?.email || "",
+    name: "The Aman",
+    email: "urtheaman@gmail.com",
     uid: "urtheaman",
     online: true,
     lastActive: new Date(),
-    profilePic: session?.user?.image || "/girl1.jpg",
+    profilePic: "/girl1.jpg",
   };
   const secondaryContent = useTypedSelector(({ ui }) => ui.secondaryContent);
   return (

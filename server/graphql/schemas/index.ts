@@ -31,16 +31,30 @@ type User {
   name: String!
   profilePic: String
 }
+type Profile {
+  _id: ID!
+  about: String!
+  state: String!
+  country: String!
+  email: String!
+  lastActive: Float!
+  name: String!
+  profilePic: String
+}
+type CreateChatReturn {
+  messagesId: String!
+  chatId: String!
+}
 type Mutation {
   # user
-  createUser(name: String!, email: String!, password: String!, state: String!, country: String!): Boolean!
+  createUser(name: String!, email: String!, password: String!, state: String!, country: String!): User!
   updateUser(userId: ID!, update: JSON!): Boolean!
   deleteUser(userId: ID!, password: String!): Boolean!
   setLastActive(userId: ID!, lastActive: Float!): Boolean!
   isOnline(userId: String!): Boolean
   isTyping(userId: String!, typing: Boolean!): Boolean
   #chat
-  createChat(people: [JSON!], message: [JSON!]): [String!]
+  createChat(people: [JSON!]!, message: [JSON!]!): 
   deleteChat(userId: ID!, chatId: ID!): Boolean!
   newMessage(chatId: ID!, message: JSON!): Boolean!
 }
@@ -50,7 +64,7 @@ type Query {
   getMessages(messagesId: ID!, from: Int!): Messages!
   #user
   getUser(email: String!, password: String!): User!
-  getProfiles(filter: JSON, skip: Int!): [User]
+  getProfiles(filter: JSON, skip: Int!): [Profile]
   getProfile(userId: ID!): User!
 }
 

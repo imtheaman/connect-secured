@@ -2,6 +2,9 @@ import { useState, ReactNode, useReducer } from "react";
 import ConnectCard from "./connect-card/ConnectCard";
 import { useNavigate } from "react-router-dom";
 import Modal from "./modal/Modal";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { CREATE_USER, GET_USER } from "../apollo/queries";
+import Loader from "./loader/Loader";
 
 const Signin: React.FC = () => {
   const [authAction, setAuthAction] = useState<
@@ -9,13 +12,25 @@ const Signin: React.FC = () => {
   >("Sign in");
   const navigate = useNavigate();
   const [modal, setModal] = useState<ReactNode | false>(false);
+  const [createUser, { data: created, loading: loading2, error: error2 }] =
+    useMutation(CREATE_USER);
+  const [getUser, { data: user, loading, error }] = useLazyQuery(GET_USER);
+  if (user) {
+    console.log(user);
+    navigate("/");
+  }
+  if (created) {
+    console.log(created);
+    navigate("/");
+  }
+  if (error || error2) setModal("Some error occured!! please retry...");
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
     if (authAction === "Sign in" && state.email && state.password) {
       const loginDetails = { email: state.email, password: state.password };
-      console.log(loginDetails);
+      getUser({ variables: loginDetails });
       dispatch({ type: "EMAIL", payload: "" });
       dispatch({ type: "PASSWORD", payload: "" });
     } else if (
@@ -37,7 +52,7 @@ const Signin: React.FC = () => {
           country: await country,
           state: await state,
         };
-        console.log(loginDetails);
+        createUser({ variables: loginDetails });
         dispatch({ type: "NAME", payload: "" });
         dispatch({ type: "EMAIL", payload: "" });
         dispatch({ type: "PASSWORD", payload: "" });
@@ -166,7 +181,7 @@ const Signin: React.FC = () => {
           )}
 
           <button type="submit" className="auth-btn" onClick={submitHandler}>
-            {authAction}
+            {loading || loading2 ? <Loader /> : authAction}
           </button>
         </form>
         <div className="flex justify-between font-thin text-sm">

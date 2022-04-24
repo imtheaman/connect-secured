@@ -15,8 +15,9 @@ import Search from "./header/Search";
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { loading, error, data } = useQuery(GET_USER, {
-    variables: { email: "email" },
+    variables: { email: "email@email.com", password: "123456" },
   });
+  console.log( data);
   const { homeContent: home, search } = useTypedSelector(({ ui }) => ui);
   // useEffect(() => {
   //   if (status === "unauthenticated") navigate("/signin", { replace: true });
