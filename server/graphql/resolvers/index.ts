@@ -55,12 +55,12 @@ const resolvers = {
     },
     getProfiles: async (
       _: any,
-      { filter, skip }: { filter?: string; skip: number },
+      { filter, skip }: { filter?: { [key: string]: string }; skip: number },
       { users }: any
     ) => {
       const query = filter ? filter : {};
       return await users
-        .findMany(query, { password: 0, activeChats: 0 })
+        .findMany({}, { password: 0, activeChats: 0 })
         .skip(skip)
         .limit(10);
     },
@@ -109,11 +109,18 @@ const resolvers = {
     },
     deleteUser: async (
       _: any,
-      { userId }: { userId: string },
+      { userId, password }: { userId: string; password: string },
       { users }: any
     ) => {
-      const result = await users.deleteOne({ _id: userId });
-      return (await result.deletedCount) === 1 ? true : false;
+      const hashedPassword = hash(password);
+      const user = await users.findOne({
+        _id: userId,
+        password: hashedPassword,
+      });
+      if (await user) {
+        const result = await users.deleteOne({ _id: userId });
+        return (await result.deletedCount) === 1 ? true : false;
+      }
     },
     createChat: async (
       _: any,
@@ -141,11 +148,14 @@ const resolvers = {
     },
     deleteChat: async (
       _: any,
-      { chatId }: { chatId: string },
+      { userId, chatId }: { userId: string; chatId: string },
       { users }: any
     ) => {
-      const result = await users.deleteOne({ _id: chatId });
-      return (await result.deletedCount) === 1 ? true : false;
+      const result = await users.updateOne(
+        { _id: userId },
+        { $pull: { activeChats: chatId } }
+      );
+      return (await result.modifiedContent) === 1 ? true : false;
     },
     newMessage: async (
       _: any,
