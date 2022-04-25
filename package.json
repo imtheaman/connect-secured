@@ -1,23 +1,56 @@
 {
   "name": "connect-chat-app",
-  "version": "1.0.0",
-  "description": "> end-to-end encryption is used to make sure your messages can't be read by others. Even people at Connect can't access it.",
-  "main": "index.js",
-  "scripts": {
-    "start": "concurrently \"cd server && npm run dev\" \"cd client && npm start\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/urtheaman/connect-chat-app.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/urtheaman/connect-chat-app/issues"
-  },
-  "homepage": "https://connect-urtheaman.vercel.app",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "concurrently": "^7.1.0"
+    "@apollo/client": "^3.5.10",
+    "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/crypto-js": "^4.1.1",
+    "@types/jest": "^27.4.1",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.1",
+    "autoprefixer": "^10.4.4",
+    "crypto-js": "^4.1.1",
+    "next-auth": "^4.3.2",
+    "postcss": "^8.4.12",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.0",
+    "react-responsive": "^9.0.0-beta.6",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.6.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.25"
   }
 }
