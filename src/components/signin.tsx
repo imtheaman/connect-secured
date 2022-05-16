@@ -5,7 +5,7 @@ import Modal from './modal/Modal';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { CREATE_USER, GET_USER } from '../apollo/queries';
 import Loader from './loader/Loader';
-import { genKey } from '../encryption';
+import { genKeyPair, hash } from '../encryption';
 import useAppDispatch from '../hooks/useAppDispatch';
 import { setPrivateKey, setToken } from '../local-states/slices/sessionSlice';
 
@@ -88,7 +88,10 @@ const Signin: React.FC = () => {
   const submitHandler = async (e: any) => {
     e.preventDefault();
     if (authAction === 'Sign in' && state.email && state.password) {
-      const loginDetails = { email: state.email, password: state.password };
+      const loginDetails = {
+        email: state.email,
+        password: hash(state.password),
+      };
       getUser({ variables: loginDetails });
       dispatch({ type: 'EMAIL', payload: '' });
       dispatch({ type: 'PASSWORD', payload: '' });
@@ -107,7 +110,8 @@ const Signin: React.FC = () => {
         ).then((res) => res.json());
         const country = await ip_details.countryName;
         const istate = await ip_details.stateProv;
-        const keys: { publicKey: string; privateKey: string } = await genKey();
+        const keys: { publicKey: string; privateKey: string } =
+          await genKeyPair();
         appDispatch(setPrivateKey(keys.privateKey));
         const res = await fetch('https://api.imgur.com/3/upload', {
           method: 'POST',
@@ -122,7 +126,7 @@ const Signin: React.FC = () => {
         const loginDetails = {
           name: state.name,
           email: state.email,
-          password: state.password,
+          password: hash(state.password),
           username: state.username,
           profilePic: image.data.link,
           publicKey: keys.publicKey,

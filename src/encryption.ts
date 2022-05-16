@@ -1,14 +1,15 @@
 //@ts-ignore
-import { Crypt, RSA } from "hybrid-crypto-js";
+import { SHA256 } from 'crypto-js';
+import { Crypt, RSA } from 'hybrid-crypto-js';
 
 const rsa = new RSA();
 const crypt = new Crypt({
-  md: "sha512",
-  aesStandard: "AES-CBC",
-  rsaStandard: "RSA-OAEP",
+  md: 'sha512',
+  aesStandard: 'AES-CBC',
+  rsaStandard: 'RSA-OAEP',
 });
 
-export const genKey = async () => {
+export const genKeyPair = async () => {
   return await rsa.generateKeyPairAsync();
 };
 
@@ -24,8 +25,15 @@ export const encrypted = async (
 export const decrypted = async (
   issuerPublicKey: string,
   privateKey: string,
-  encrypted: string
+  encryptedMsg: string
 ) => {
-  const decrypted = await crypt.decrypt(privateKey, encrypted);
-  await crypt.verify(issuerPublicKey, decrypted.signature, decrypted.message);
+  const decrypted = await crypt.decrypt(privateKey, encryptedMsg);
+  const verified = await crypt.verify(
+    issuerPublicKey,
+    decrypted.signature,
+    decrypted.message
+  );
+  return verified ? decrypted : 'Signature not verified';
 };
+
+export const hash = (input: string) => SHA256(input).toString();

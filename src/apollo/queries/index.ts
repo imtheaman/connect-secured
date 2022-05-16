@@ -11,7 +11,6 @@ export const GET_USER = gql`
       country
       activeChats
       name
-      publicKey
       email
     }
   }
@@ -88,11 +87,13 @@ export const CREATE_USER = gql`
     $username: String!
     $name: String!
     $publicKey: String!
+    $profilePic: String
     $email: String!
     $password: String!
   ) {
     createUser(
       state: $state
+      profilePic: $profilePic
       username: $username
       publicKey: $publicKey
       country: $country
@@ -108,7 +109,6 @@ export const CREATE_USER = gql`
       email
       lastActive
       name
-      publicKey
       profilePic
     }
   }
