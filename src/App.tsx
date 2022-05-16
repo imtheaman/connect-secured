@@ -7,6 +7,7 @@ import Signin from './components/signin';
 import useTypedSelector from './hooks/useAppSelector';
 import StartIntro from './components/start-intro/StartIntro';
 import SecuredRoute from './components/SecuredRoute';
+import NotFound from './components/404';
 
 const App: React.FC = () => {
   const desktop = useMediaQuery({
@@ -19,12 +20,12 @@ const App: React.FC = () => {
   const { secondaryContent } = useTypedSelector(({ ui }) => ui);
   return (
     <Routes>
-      <Route path="/" element={<SecuredRoute />}>
+      <Route path='/' element={<SecuredRoute />}>
         <Route
           index
           element={
             desktop ? (
-              <div className="flex">
+              <div className='flex'>
                 <Home />
                 {secondaryContent ? (
                   <>
@@ -36,7 +37,7 @@ const App: React.FC = () => {
                 )}
               </div>
             ) : tablet ? (
-              <div className="flex">
+              <div className='flex'>
                 <Home />
                 {secondaryContent ? (
                   secondaryContent === 'Chat' ? (
@@ -64,7 +65,8 @@ const App: React.FC = () => {
           }
         />
       </Route>
-      <Route path="/signin" element={<Signin />} />
+      <Route path='/signin' element={<Signin />} />
+      <Route path='/*' element={<NotFound />} />
     </Routes>
   );
 };
