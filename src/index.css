@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@layer base {
+  .fullscreen {
+    height: 100vh;
+  }
+  #chat-list {
+    height: calc(100vh - 14rem);
+  }
+  #chat {
+    height: calc(100vh - 5rem);
+  }
+  #about {
+    height: calc(100vh - 14rem);
+  }
+  #profile {
+    min-height: calc(100vh - 5rem);
+  }
+  .nots-toggle.react-toogle--checked .react-toggle-track {
+    background-color: #202020;
+  }
+  /* <Modal> */
+  #modal-container {
+    background: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  #modal-div {
+    cursor: default;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 3rem;
+    position: relative;
+    width: 80%;
+    max-width: 30rem;
+    display: flex;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    flex-direction: column;
+  }
+  #modal-btn {
+    cursor: pointer;
+    width: 100%;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 1.9rem;
+  }
+  /* </Modal> */
+  img {
+    user-select: none;
+  }
+  ::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+    /* box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+    border-radius: 10px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    #chat {
+      height: calc(100vh - 5rem);
+    }
+    #about {
+      height: calc(100vh - 14rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      margin: 2.5rem;
+      min-height: calc(100vh - 5rem);
+    }
+    ::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+      background-color: transparent;
+      display: block;
+    }
+    .fullscreen {
+      height: calc(100vh - 5rem);
+    }
+    #about {
+      height: calc(100vh - 19rem);
+    }
+    #chat-list {
+      height: calc(100vh - 19rem);
+    }
+    #chat {
+      height: calc(100vh - 10rem);
+    }
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+  }
+}
+
+@layer components {
+  .auth-btn {
+    @apply flex items-center bg-light-black text-white py-3 w-full justify-center rounded-full outline-none;
+  }
+  .bg-gradient-br {
+    @apply bg-gradient-to-br from-[#aee7f4] to-[#cdf8a6];
+  }
+  .bg-gradient-r {
+    @apply bg-gradient-to-br from-[#aee7f4] to-[#cdf8a6];
+  }
+  .input {
+    @apply bg-transparent border border-gray-300 px-4 py-[0.6rem] rounded-full outline-none;
+  }
+}

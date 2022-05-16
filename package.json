@@ -1,0 +1,36 @@
+{
+  "name": "connect",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@reduxjs/toolkit": "^1.8.1",
+    "autoprefixer": "^10.4.5",
+    "crypto-js": "^4.1.1",
+    "graphql": "^16.5.0",
+    "hybrid-crypto-js": "^0.2.4",
+    "imagekitio-react": "^1.1.0",
+    "postcss": "^8.4.13",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.0",
+    "react-responsive": "^9.0.0-beta.6",
+    "react-router-dom": "^6.3.0",
+    "redux-persist": "^6.0.0",
+    "tailwindcss": "^3.0.24"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/node": "17.0.30",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^1.3.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.7"
+  }
+}
