@@ -1,13 +1,22 @@
 import { useState, ReactNode, useReducer, useEffect } from 'react';
-import ConnectCard from './connect-card/ConnectCard';
+import ConnectCard from '../connect-card/ConnectCard';
 import { useNavigate } from 'react-router-dom';
-import Modal from './modal/Modal';
+import Modal from '../modal/Modal';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { CREATE_USER, GET_USER } from '../apollo/queries';
-import Loader from './loader/Loader';
-import { genKeyPair, hash } from '../encryption';
-import useAppDispatch from '../hooks/useAppDispatch';
-import { setPrivateKey, setToken } from '../local-states/slices/sessionSlice';
+import {
+  CHECK_EMAIL,
+  CHECK_USERNAME,
+  CREATE_USER,
+  GET_USER,
+} from '../../apollo/queries';
+import Loader from '../loader/Loader';
+import { genKeyPair, hash } from '../../encryption';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import {
+  setPrivateKey,
+  setToken,
+} from '../../local-states/slices/sessionSlice';
+import useTimer from '../../hooks/useTimer';
 
 type State = {
   name: string;
@@ -55,107 +64,12 @@ const Signin: React.FC = () => {
   const [modal, setModal] = useState<ReactNode | false>(false);
   const navigate = useNavigate();
   const appDispatch = useAppDispatch();
-  const [createUser, { data: data2, loading: loading2, error: error2 }] =
+  const [createUser, { data: createdUser, loading: loading2, error: error2 }] =
     useMutation(CREATE_USER);
-  const [getUser, { data: data1, loading, error: error1 }] =
+  const [getUser, { data: loggedUser, loading, error: error1 }] =
     useLazyQuery(GET_USER);
-  useEffect(() => {
-    if (error1) {
-      console.log(error1);
-      setModal(
-        <p className='text-red-500 italic font-semibold text-xl'>
-          {error1.message}
-        </p>
-      );
-    } else if (error2) {
-      console.log(error2);
-      setModal(
-        <p className='text-red-500 italic font-semibold text-xl'>
-          {error2.message}
-        </p>
-      );
-    } else if (data1) {
-      console.log(data1.getUser._id);
-      appDispatch(setToken(data1.getUser._id));
-      navigate('/');
-    } else if (data2) {
-      console.log(data2.createUser._id);
-      appDispatch(setToken(data2.createUser._id));
-      navigate('/');
-    }
-  }, [error1, error2, data1, data2]);
-
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
-    if (authAction === 'Sign in' && state.email && state.password) {
-      const loginDetails = {
-        email: state.email,
-        password: hash(state.password),
-      };
-      getUser({ variables: loginDetails });
-      dispatch({ type: 'EMAIL', payload: '' });
-      dispatch({ type: 'PASSWORD', payload: '' });
-    } else if (
-      (authAction === 'Sign up' || 'Create User') &&
-      state.name &&
-      state.email &&
-      state.password &&
-      state.repeat_password &&
-      state.profilePic &&
-      state.username
-    ) {
-      if (state.password === state.repeat_password) {
-        const ip_details = await fetch(
-          'https://api.db-ip.com/v2/free/self'
-        ).then((res) => res.json());
-        const country = await ip_details.countryName;
-        const istate = await ip_details.stateProv;
-        const keys: { publicKey: string; privateKey: string } =
-          await genKeyPair();
-        appDispatch(setPrivateKey(keys.privateKey));
-        const res = await fetch('https://api.imgur.com/3/upload', {
-          method: 'POST',
-          headers: {
-            Authorization: 'Client-ID' + import.meta.env.VITE_IMGUR_ID,
-          },
-          body: state.profilePic,
-        });
-        const image = await res.json();
-        console.log(image);
-
-        const loginDetails = {
-          name: state.name,
-          email: state.email,
-          password: hash(state.password),
-          username: state.username,
-          profilePic: image.data.link,
-          publicKey: keys.publicKey,
-          country,
-          state: istate,
-        };
-        createUser({ variables: loginDetails });
-        dispatch({ type: 'NAME', payload: '' });
-        dispatch({ type: 'EMAIL', payload: '' });
-        dispatch({ type: 'PASSWORD', payload: '' });
-        dispatch({ type: 'REPEAT_PASSWORD', payload: '' });
-      } else {
-        setAuthAction('Sign up');
-        setModal(
-          <h3 className='text-lg font-semibold'>Passwords don't match</h3>
-        );
-      }
-    } else if (authAction === 'Send OTP' && state.email) {
-      dispatch({ type: 'EMAIL', payload: '' });
-    } else if (authAction === 'Reset' && state.email) {
-      dispatch({ type: 'EMAIL', payload: '' });
-    } else
-      setModal(
-        <h3 className='text-lg font-semibold'>
-          Please fill all the required details
-        </h3>
-      );
-  };
-
+  const [checkEmail, { data: validEmail }] = useLazyQuery(CHECK_EMAIL);
+  const [checkUsername, { data: validUsername }] = useLazyQuery(CHECK_USERNAME);
   const [state, dispatch] = useReducer(reducer, {
     name: '',
     email: '',
@@ -164,6 +78,114 @@ const Signin: React.FC = () => {
     username: '',
     profilePic: null,
   });
+  useTimer(async () => {
+    await checkEmail({ variables: { email: state.email } });
+  }, [state.email]);
+  useTimer(async () => {
+    await checkUsername({ variables: { username: state.username } });
+  }, [state.username]);
+
+  const submitHandler = async (e: any) => {
+    e.preventDefault();
+    // if (authAction === 'Sign in') {
+
+    // }
+    // else if (authAction === 'Sign up') {
+
+    // }
+    //
+    //   : authAction !== ('Sign in' || 'Sign up') && state.email
+    //   ? null
+    //   : authAction === 'Sign in' && state.email && state.password
+    //   ? null
+    //   : authAction === 'Sign up' && state.name && state.repeat_password
+    //   ? null
+    //   : authAction === 'Create User' && state.profilePic && state.username
+    //   ? null
+    //   : setModal(<p>Please fill all the required details</p>);
+    switch (authAction) {
+      case 'Sign in':
+        if (!state.email || !state.password)
+          setModal(<p>Please fill all the required details</p>);
+        else if (validEmail?.checkEmail === false)
+          setModal(<p>Email is already registered</p>);
+        else {
+          const loginDetails = {
+            email: state.email,
+            password: hash(state.password),
+          };
+          await getUser({ variables: loginDetails });
+          if (error1)
+            setModal(
+              <p className='text-red-500 italic font-semibold text-xl'>
+                {error1.message}
+              </p>
+            );
+          else if (loggedUser) {
+            appDispatch(setToken(loggedUser.getUser._id));
+            dispatch({ type: 'EMAIL', payload: '' });
+            dispatch({ type: 'PASSWORD', payload: '' });
+          }
+        }
+        return;
+      case 'Sign up':
+        if (
+          !(
+            state.email &&
+            state.name &&
+            state.password &&
+            state.repeat_password
+          )
+        )
+          setModal(<p>Please fill all the required details</p>);
+        else
+          state.password === state.repeat_password
+            ? setAuthAction('Create User')
+            : setModal(<p>Passwords don't match</p>);
+        return;
+      case 'Create User':
+        if (!(state.profilePic && state.username))
+          setModal(<p>Please fill all the required details</p>);
+        else if (validUsername?.checkUsername === false)
+          setModal(<p>Username is taken. Choose another one</p>);
+        else {
+          const ip_details = await fetch(
+            'https://api.db-ip.com/v2/free/self'
+          ).then((res) => res.json());
+
+          const { countryName, stateProv } = ip_details;
+          const keys: { publicKey: string; privateKey: string } =
+            await genKeyPair();
+          appDispatch(setPrivateKey(keys.privateKey));
+          // image upload code
+          const { name, email, password, profilePic, username } = state;
+          const userDetails = {
+            name,
+            email,
+            password: hash(password),
+            username,
+            profilePic,
+            publicKey: keys.publicKey,
+            country: countryName,
+            state: stateProv,
+          };
+          createUser({ variables: userDetails });
+          dispatch({ type: 'NAME', payload: '' });
+          dispatch({ type: 'EMAIL', payload: '' });
+          dispatch({ type: 'PASSWORD', payload: '' });
+          dispatch({ type: 'REPEAT_PASSWORD', payload: '' });
+          dispatch({ type: 'USERNAME', payload: '' });
+          dispatch({ type: 'PROFILE_PIC', payload: '' });
+        }
+        return;
+      case 'Send OTP':
+      case 'Reset':
+        if (state.email) {
+          dispatch({ type: 'EMAIL', payload: '' });
+        } else setModal(<p>Please fill all the required details</p>);
+        return;
+    }
+  };
   return (
     <ConnectCard className='grid grid-cols-1 md:grid-cols-2'>
       {modal && (
@@ -216,7 +238,11 @@ const Signin: React.FC = () => {
               onChange={(e) =>
                 dispatch({ type: 'EMAIL', payload: e.target.value })
               }
-              className='input'
+              className={`input ${
+                authAction === 'Sign up' &&
+                validEmail?.checkEmail === false &&
+                'ring-1 ring-red-500'
+              }`}
               placeholder='Email'
             />
           )}
@@ -281,22 +307,16 @@ const Signin: React.FC = () => {
                     payload: e.target.value.toLowerCase(),
                   })
                 }
-                className='input'
+                className={`input ${
+                  validUsername?.checkUsername === false &&
+                  'ring-1 ring-red-500'
+                }`}
                 placeholder='Username'
               />
             </>
           )}
 
-          <button
-            type='submit'
-            className='auth-btn'
-            onClick={(e) => {
-              e.preventDefault();
-              authAction === 'Sign up'
-                ? setAuthAction('Create User')
-                : submitHandler(e);
-            }}
-          >
+          <button type='submit' className='auth-btn' onClick={submitHandler}>
             {loading || loading2 ? <Loader /> : authAction}
           </button>
         </form>

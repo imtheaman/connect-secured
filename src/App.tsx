@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import Home from './components/Home';
-import Chat from './components/chat-with-user/Chat';
+const Home = lazy(() => import('./components/Home'));
+const Chat = lazy(() => import('./components/chat-with-user/Chat'));
 import { Route, Routes } from 'react-router-dom';
-import Profile from './components/profile';
-import Signin from './components/signin';
+const Profile = lazy(() => import('./components/profile'));
+const Signin = lazy(() => import('./components/authentication/signin'));
 import useTypedSelector from './hooks/useAppSelector';
-import StartIntro from './components/start-intro/StartIntro';
+const StartIntro = lazy(() => import('./components/start-intro/StartIntro'));
 import SecuredRoute from './components/SecuredRoute';
-import NotFound from './components/404';
+import Loader from './components/loader/Loader';
+const NotFound = lazy(() => import('./components/404'));
 
 const App: React.FC = () => {
   const desktop = useMediaQuery({
@@ -24,44 +26,46 @@ const App: React.FC = () => {
         <Route
           index
           element={
-            desktop ? (
-              <div className='flex'>
-                <Home />
-                {secondaryContent ? (
-                  <>
-                    <Chat />
-                    {secondaryContent !== 'Chat' && <Profile />}
-                  </>
-                ) : (
-                  <StartIntro />
-                )}
-              </div>
-            ) : tablet ? (
-              <div className='flex'>
-                <Home />
-                {secondaryContent ? (
-                  secondaryContent === 'Chat' ? (
-                    <Chat />
-                  ) : (
-                    <Profile />
-                  )
-                ) : (
-                  <StartIntro />
-                )}
-              </div>
-            ) : (
-              <>
-                {secondaryContent ? (
-                  secondaryContent === 'Chat' ? (
-                    <Chat />
-                  ) : (
-                    <Profile />
-                  )
-                ) : (
+            <Suspense fallback={<Loader />}>
+              {desktop ? (
+                <div className='flex'>
                   <Home />
-                )}
-              </>
-            )
+                  {secondaryContent ? (
+                    <>
+                      <Chat />
+                      {secondaryContent !== 'Chat' && <Profile />}
+                    </>
+                  ) : (
+                    <StartIntro />
+                  )}
+                </div>
+              ) : tablet ? (
+                <div className='flex'>
+                  <Home />
+                  {secondaryContent ? (
+                    secondaryContent === 'Chat' ? (
+                      <Chat />
+                    ) : (
+                      <Profile />
+                    )
+                  ) : (
+                    <StartIntro />
+                  )}
+                </div>
+              ) : (
+                <>
+                  {secondaryContent ? (
+                    secondaryContent === 'Chat' ? (
+                      <Chat />
+                    ) : (
+                      <Profile />
+                    )
+                  ) : (
+                    <Home />
+                  )}
+                </>
+              )}
+            </Suspense>
           }
         />
       </Route>

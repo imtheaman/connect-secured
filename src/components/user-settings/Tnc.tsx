@@ -1,9 +1,5 @@
 const Tnc: React.FC = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return <div>Terms and conditions</div>;
+};
 
-export default Tnc
+export default Tnc;
