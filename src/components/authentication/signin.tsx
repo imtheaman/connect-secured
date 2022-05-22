@@ -8,15 +8,11 @@ import {
   CHECK_USERNAME,
   CREATE_USER,
   GET_USER,
+  UPDATE_USER,
 } from '../../apollo/queries';
 import Loader from '../loader/Loader';
 import { genKeyPair, hash } from '../../encryption';
-import useAppDispatch from '../../hooks/useAppDispatch';
-import {
-  setPrivateKey,
-  setToken,
-} from '../../local-states/slices/sessionSlice';
-import useTimer from '../../hooks/useTimer';
+import { useCookies } from 'react-cookie';
 
 type State = {
   name: string;
@@ -57,19 +53,31 @@ const reducer = (
   }
 };
 
+const capitalize = (value: string) => {
+  if (!value) return value;
+  const words = value.split(' ');
+  const capitalized: string[] = [];
+  words.forEach((el) => {
+    el && capitalized.push(el[0].toUpperCase() + el.slice(1, el.length));
+  });
+  return capitalized.join(' ');
+};
+
 const Signin: React.FC = () => {
   const [authAction, setAuthAction] = useState<
     'Sign in' | 'Sign up' | 'Send OTP' | 'Reset' | 'Create User'
   >('Sign in');
+  const navigate = useNavigate()
+  const [cookies,setCookie] = useCookies(['token', 'privateKey'])
   const [modal, setModal] = useState<ReactNode | false>(false);
-  const navigate = useNavigate();
-  const appDispatch = useAppDispatch();
+  
   const [createUser, { data: createdUser, loading: loading2, error: error2 }] =
     useMutation(CREATE_USER);
   const [getUser, { data: loggedUser, loading, error: error1 }] =
     useLazyQuery(GET_USER);
   const [checkEmail, { data: validEmail }] = useLazyQuery(CHECK_EMAIL);
   const [checkUsername, { data: validUsername }] = useLazyQuery(CHECK_USERNAME);
+  const [updateUser] = useMutation(UPDATE_USER)
   const [state, dispatch] = useReducer(reducer, {
     name: '',
     email: '',
@@ -78,66 +86,93 @@ const Signin: React.FC = () => {
     username: '',
     profilePic: null,
   });
-  useTimer(async () => {
-    await checkEmail({ variables: { email: state.email } });
-  }, [state.email]);
-  useTimer(async () => {
-    await checkUsername({ variables: { username: state.username } });
-  }, [state.username]);
+
+  useEffect(() => {
+    if (loggedUser) {
+      setCookie('token', loggedUser.getUser._id, {sameSite: true})
+      localStorage.setItem('user', JSON.stringify(loggedUser.getUser))
+      dispatch({ type: 'EMAIL', payload: '' });
+      dispatch({ type: 'PASSWORD', payload: '' });
+      if (!cookies.privateKey) {
+        (async() => {
+          const keys: { publicKey: string; privateKey: string } = await genKeyPair();
+          await updateUser({variables: {token: loggedUser.getUser._id, update: {publicKey: keys.publicKey}}})
+          setCookie('privateKey', keys.privateKey)
+        })()}
+      navigate('/',{replace: true})
+    }
+    else if (error1) setModal(
+      <p className='text-red-500'>
+        {error1.message}
+      </p>
+    );
+    else if (createdUser) {
+      setCookie('token', createdUser.createUser._id)
+      dispatch({ type: 'NAME', payload: '' });
+      dispatch({ type: 'EMAIL', payload: '' });
+      dispatch({ type: 'PASSWORD', payload: '' });
+      dispatch({ type: 'REPEAT_PASSWORD', payload: '' });
+      dispatch({ type: 'USERNAME', payload: '' });
+      dispatch({ type: 'PROFILE_PIC', payload: '' });
+      navigate('/',{replace: true})
+    }
+    else if (error2) setModal(
+      <p className='text-red-500'>
+        {error2.message}
+      </p>
+    );
+    cookies.token && navigate('/', {replace: true})
+  }, [loggedUser, createdUser, error1, error2])
+
+  useEffect(() => {
+    if (authAction === 'Sign up') checkEmail({ variables: { email: state.email } });
+    if (authAction === 'Create User') checkUsername({ variables: { username: state.username } });
+  }, [state.email, state.username]);
+
+  const isEmail = (value: string): boolean => {
+    const regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regexp.test(value)
+  }
+
+  const validatedEmail = authAction === 'Sign up' && isEmail(state.email) &&
+  (validEmail?.checkEmail === false ?
+  'ring-1 ring-red-500': validEmail?.checkEmail === true ? 'ring-1 ring-green-500': '')
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-    // if (authAction === 'Sign in') {
-
-    // }
-    // else if (authAction === 'Sign up') {
-
-    // }
-    //
-    //   : authAction !== ('Sign in' || 'Sign up') && state.email
-    //   ? null
-    //   : authAction === 'Sign in' && state.email && state.password
-    //   ? null
-    //   : authAction === 'Sign up' && state.name && state.repeat_password
-    //   ? null
-    //   : authAction === 'Create User' && state.profilePic && state.username
-    //   ? null
-    //   : setModal(<p>Please fill all the required details</p>);
+    if (!state.email) {
+      setModal(<p>Email can't be empty</p>)
+      return;
+    }
+    else if (!isEmail(state.email)) {
+      setModal(<p>Please enter a valid email</p>);
+      return;
+    }
+    
     switch (authAction) {
       case 'Sign in':
-        if (!state.email || !state.password)
-          setModal(<p>Please fill all the required details</p>);
-        else if (validEmail?.checkEmail === false)
-          setModal(<p>Email is already registered</p>);
+        if (!state.password) setModal(<p>Please fill all the required details</p>);
         else {
           const loginDetails = {
             email: state.email,
             password: hash(state.password),
           };
-          await getUser({ variables: loginDetails });
-          if (error1)
-            setModal(
-              <p className='text-red-500 italic font-semibold text-xl'>
-                {error1.message}
-              </p>
-            );
-          else if (loggedUser) {
-            appDispatch(setToken(loggedUser.getUser._id));
-            dispatch({ type: 'EMAIL', payload: '' });
-            dispatch({ type: 'PASSWORD', payload: '' });
-          }
+          getUser({ variables: loginDetails });
+          if (error1) setModal(<p className='text-red-500'>
+          {error1.message}
+        </p>)
         }
         return;
       case 'Sign up':
         if (
           !(
-            state.email &&
             state.name &&
             state.password &&
             state.repeat_password
           )
         )
           setModal(<p>Please fill all the required details</p>);
+          else if (validEmail.checkEmail === false) setModal(<p>Email is already registered.</p>)
         else
           state.password === state.repeat_password
             ? setAuthAction('Create User')
@@ -146,36 +181,28 @@ const Signin: React.FC = () => {
       case 'Create User':
         if (!(state.profilePic && state.username))
           setModal(<p>Please fill all the required details</p>);
-        else if (validUsername?.checkUsername === false)
+        else if (validUsername.checkUsername === false)
           setModal(<p>Username is taken. Choose another one</p>);
         else {
-          const ip_details = await fetch(
+          const {countryName, stateProv} = await fetch(
             'https://api.db-ip.com/v2/free/self'
-          ).then((res) => res.json());
+          ).then((res) => res.json()).catch(err => console.error(err))
 
-          const { countryName, stateProv } = ip_details;
-          const keys: { publicKey: string; privateKey: string } =
-            await genKeyPair();
-          appDispatch(setPrivateKey(keys.privateKey));
+          const keys: { publicKey: string; privateKey: string } = await genKeyPair();
+          setCookie('privateKey', keys.privateKey)
           // image upload code
           const { name, email, password, profilePic, username } = state;
           const userDetails = {
-            name,
+            name: capitalize(name),
             email,
             password: hash(password),
             username,
             profilePic,
             publicKey: keys.publicKey,
-            country: countryName,
-            state: stateProv,
+            country: countryName || '',
+            state: stateProv || '',
           };
           createUser({ variables: userDetails });
-          dispatch({ type: 'NAME', payload: '' });
-          dispatch({ type: 'EMAIL', payload: '' });
-          dispatch({ type: 'PASSWORD', payload: '' });
-          dispatch({ type: 'REPEAT_PASSWORD', payload: '' });
-          dispatch({ type: 'USERNAME', payload: '' });
-          dispatch({ type: 'PROFILE_PIC', payload: '' });
         }
         return;
       case 'Send OTP':
@@ -198,7 +225,7 @@ const Signin: React.FC = () => {
           <div
             className={
               authAction === 'Sign up' || authAction === 'Create User'
-                ? 'text-lg font-thin cursor-pointer'
+                ? 'text-lg font-light cursor-pointer'
                 : 'text-2xl font-semibold cursor-pointer'
             }
             onClick={() => setAuthAction('Sign in')}
@@ -210,7 +237,7 @@ const Signin: React.FC = () => {
             className={
               authAction === 'Sign up' || authAction === 'Create User'
                 ? 'text-2xl font-semibold cursor-pointer'
-                : 'text-lg font-thin cursor-pointer'
+                : 'text-lg font-light cursor-pointer'
             }
             onClick={() => setAuthAction('Sign up')}
           >
@@ -236,12 +263,10 @@ const Signin: React.FC = () => {
               type='email'
               value={state.email}
               onChange={(e) =>
-                dispatch({ type: 'EMAIL', payload: e.target.value })
+                dispatch({ type: 'EMAIL', payload: e.target.value.toLowerCase() })
               }
               className={`input ${
-                authAction === 'Sign up' &&
-                validEmail?.checkEmail === false &&
-                'ring-1 ring-red-500'
+                validatedEmail
               }`}
               placeholder='Email'
             />
@@ -304,12 +329,13 @@ const Signin: React.FC = () => {
                 onChange={(e) =>
                   dispatch({
                     type: 'USERNAME',
-                    payload: e.target.value.toLowerCase(),
+                    payload: e.target.value.trim().toLowerCase(),
                   })
                 }
                 className={`input ${
-                  validUsername?.checkUsername === false &&
-                  'ring-1 ring-red-500'
+                  authAction === 'Create User' && state.username &&
+                (validUsername?.checkUsername === false ?
+                'ring-1 ring-red-500': validUsername?.checkUsername === true? 'ring-1 ring-green-500': '')
                 }`}
                 placeholder='Username'
               />

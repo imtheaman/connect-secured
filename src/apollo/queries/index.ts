@@ -113,14 +113,19 @@ export const CREATE_USER = gql`
     }
   }
 `;
+export const LOG_OUT = gql`
+  mutation ($token: ID!) {
+    logOut (token: $token)
+  }
+`
 export const UPDATE_USER = gql`
-  mutation ($userId: ID!, $update: JSON!) {
-    updateUser(userId: $userId, update: $update)
+  mutation ($token: ID!, $update: JSON!) {
+    updateUser(token: $token, update: $update)
   }
 `;
 export const DELETE_USER = gql`
-  mutation ($userId: ID!, $password: String!) {
-    deleteUser(userId: $userId, password: $password)
+  mutation ($token: ID!, $password: String!) {
+    deleteUser(token: $token, password: $password)
   }
 `;
 export const SET_LAST_ACTIVE = gql`

@@ -19,6 +19,7 @@ export interface User {
   activeChats: [string];
   email: string;
   lastActive: number;
+  publicKey: string;
   name: string;
   state: string;
   country: string;

@@ -2,13 +2,13 @@ import { lazy, useState } from 'react';
 import Header from './header/Header';
 import ChatList from './chat-list/ChatList';
 import CreateNewChatButton from './footer/CreateNewChatButton';
-const UserSettings = lazy(() => import('./user-settings/UserSettings'));
+import UserSettings from './user-settings/UserSettings'
 import useTypedSelector from '../hooks/useAppSelector';
-const ThemesSettings = lazy(() => import('./user-settings/ThemesSettings'));
-const ChatSettings = lazy(() => import('./user-settings/ChatSettings'));
-const PrivacySettings = lazy(() => import('./user-settings/PrivacySettings'));
-const NewChat = lazy(() => import('./new-chat/NewChat'));
-const Search = lazy(() => import('./header/Search'));
+import ThemesSettings from './user-settings/ThemesSettings'
+import ChatSettings from './user-settings/ChatSettings'
+import PrivacySettings from './user-settings/PrivacySettings'
+import NewChat from './new-chat/NewChat'
+import Search from './header/Search'
 
 const Home: React.FC = () => {
   const home = useTypedSelector(({ ui }) => ui.homeContent);

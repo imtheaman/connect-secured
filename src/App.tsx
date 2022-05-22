@@ -26,7 +26,7 @@ const App: React.FC = () => {
         <Route
           index
           element={
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'><Loader height='h-10' /></div>}>
               {desktop ? (
                 <div className='flex'>
                   <Home />
