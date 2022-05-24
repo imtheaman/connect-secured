@@ -13,10 +13,10 @@ const NotFound = lazy(() => import('./components/404'));
 
 const App: React.FC = () => {
   const desktop = useMediaQuery({
-    query: '(min-width: 1024px)',
+    query: '(min-width: 1024px)'
   });
   const tablet = useMediaQuery({
-    query: '(min-width: 768px)',
+    query: '(min-width: 768px)'
   });
 
   const { secondaryContent } = useTypedSelector(({ ui }) => ui);
@@ -26,7 +26,13 @@ const App: React.FC = () => {
         <Route
           index
           element={
-            <Suspense fallback={<div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'><Loader height='h-10' /></div>}>
+            <Suspense
+              fallback={
+                <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
+                  <Loader height='h-10' />
+                </div>
+              }
+            >
               {desktop ? (
                 <div className='flex'>
                   <Home />

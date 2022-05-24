@@ -18,18 +18,21 @@ export const GET_USER = gql`
 export const GET_CHAT = gql`
   query ($chatId: ID!) {
     getChat(chatId: $chatId) {
+      _id
+      name
+      profilePic
+      people
       lastMessage {
         content
         sender
         sentAt
       }
-      people
     }
   }
 `;
 export const GET_PROFILES = gql`
-  query ($filter: JSON, $skip: Int!) {
-    getProfiles(filter: $filter, skip: $skip) {
+  query ($search: String, $skip: Int!) {
+    getProfiles(search: $search, skip: $skip) {
       _id
       about
       state

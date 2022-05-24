@@ -1,26 +1,23 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import ProfileContent from './profile/ProfileContent';
 import ProfileHeader from './profile/ProfileHeader';
-import useTypedSelector from '../hooks/useAppSelector';
+import useAppSelector from '../hooks/useAppSelector';
+import Loader from './loader/Loader';
+import { useCookies } from 'react-cookie';
+import { readJwt } from '../read-token';
 const ProfileEdit = lazy(() => import('./profile/ProfileEdit'));
 
 const Profile: React.FC = () => {
-  const user = {
-    name: 'The Aman',
-    email: 'urtheaman@gmail.com',
-    uid: 'urtheaman',
-    online: true,
-    lastActive: new Date(),
-    profilePic: '/girl1.jpg',
-  };
-  const secondaryContent = useTypedSelector(({ ui }) => ui.secondaryContent);
+  const secondaryContent = useAppSelector(({ ui }) => ui.secondaryContent);
   return (
     <main className='px-4 bg-gray-100 pt-6 lg:border-l overflow-hidden lg:border-gray-300 w-full fullscreen lg:max-w-[22rem]'>
       <ProfileHeader />
-      {secondaryContent && secondaryContent === 'ProfileEdit' ? (
-        <ProfileEdit />
+      {secondaryContent === 'ProfileEdit' ? (
+        <Suspense fallback={<Loader />}>
+          <ProfileEdit />
+        </Suspense>
       ) : (
-        <ProfileContent user={user} />
+        <ProfileContent />
       )}
     </main>
   );

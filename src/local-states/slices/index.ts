@@ -1,8 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import sessionReducer from "./sessionSlice";
+import chatReducer from "./chatSlice";
+import MessagesReducer from "./messagesSlice";
 import uiReducer from "./uiSlice";
 const rootReducer = combineReducers({
-    session: sessionReducer,
+    chat: chatReducer,
     ui: uiReducer,
+    messages: MessagesReducer
 })
 export default rootReducer

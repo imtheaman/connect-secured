@@ -10,7 +10,6 @@ type HomeContent =
 interface Ui {
   homeContent: HomeContent;
   secondaryContent: false | 'Profile' | 'Chat' | 'ProfileEdit';
-  userUid: string | null;
 }
 
 const uiSlice = createSlice({
@@ -18,8 +17,6 @@ const uiSlice = createSlice({
   initialState: {
     homeContent: 'Home',
     secondaryContent: false,
-    userUid: null,
-    search: false,
   } as Ui,
   reducers: {
     setHomeContent: (state: Ui, action: PayloadAction<HomeContent>) => {
@@ -30,13 +27,10 @@ const uiSlice = createSlice({
       action: PayloadAction<false | 'Profile' | 'Chat' | 'ProfileEdit'>
     ) => {
       state.secondaryContent = action.payload;
-    },
-    userUid: (state: Ui, action: PayloadAction<string | null>) => {
-      state.userUid = action.payload;
     }
   },
 });
 
 const { actions, reducer: uiReducer } = uiSlice;
-export const { setHomeContent, secondaryContent, userUid } = actions;
+export const { setHomeContent, secondaryContent } = actions;
 export default uiReducer;
