@@ -8,7 +8,7 @@ const Search: React.FC<{
       className='bg-black-transparent absolute z-20 top-0 shadow-md left-0 bottom-0 right-0 px-6 py-7'
       onClick={() => setSearch(false)}
     >
-      <SearchInput />
+      <SearchInput setSearch={setSearch} />
     </div>
   );
 };
