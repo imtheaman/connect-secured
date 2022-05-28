@@ -4,15 +4,4 @@
 
 it's responsive mostly using js library react-responsive.
 
-tech used in this project -
-* React.js
-* React-responsive
-* TypeScript
-* Tailwindcss
-* Mongodb
-* Secure-auth
-* GraphQL
-* Apollo Client
-
-todo: 
-- separate signup and signin logic
+## ⚠️ recreating the server from scratch ⚠️
