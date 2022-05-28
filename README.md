@@ -16,9 +16,3 @@ tech used in this project -
 
 todo: 
 - separate signup and signin logic
-- lazy load signup.tsx when create account is clicked
-- lazy load Signin.tsx when token is available.
-- lazy load all other components in app.tsx when token isn't available.
-- lazy load profile.tsx when profile is clicked.
-- lazy load profileEdit.tsx when profile edit is clicked.
-- lazy load chat.tsx when chat is clicked.
