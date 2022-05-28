@@ -5,3 +5,5 @@
 it's responsive mostly using js library react-responsive.
 
 ## ⚠️ recreating the server from scratch ⚠️
+
+## 🎯 i'm developing react native version of this app as well. 
