@@ -3,7 +3,3 @@
 > end-to-end encryption is used to make sure your messages can't be read by others. Even people at Connect can't access it.
 
 it's responsive mostly using js library react-responsive.
-
-## ⚠️ recreating the server from scratch ⚠️
-
-## 🎯 i'm developing react native version of this app as well. 
