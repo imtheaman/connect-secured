@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "^1.8.1",
     "autoprefixer": "^10.4.5",
     "crypto-js": "^4.1.1",
-    "graphql": "^16.5.0",
+    "graphql": "^16.8.1",
     "http-proxy-middleware": "^2.0.6",
     "hybrid-crypto-js": "^0.2.4",
     "imagekitio-react": "^1.1.0",
